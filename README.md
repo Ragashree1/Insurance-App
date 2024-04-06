@@ -13,7 +13,7 @@
     npm ci
     npm run build
     ```
-4. Seeding in data
+4. Seeding in data (for SQLite) 
     ```
     touch database/database.sqlite
     php artisan migrate:fresh --seed
