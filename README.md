@@ -7,19 +7,52 @@
     git clone <url>
     cp .env.example .env
     ```
-3. run the following commands 
+3. Settings for sqlite and mysql
+   ### sqlite
+    sqlite settings in env
+    ```
+    DB_CONNECTION=sqlite
+    ```
+    linux:
+    ```
+    touch database/database.sqlite
+    ```
+    windows cmd.exe:
+    ```
+    type NUL > database\database.sqlite
+    ```
+   ### mysql
+    mysql settings in env
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=laravel
+    DB_USERNAME=root
+    DB_PASSWORD=
+   ```
+   Change database name and port accordingly
+4. run the following commands 
     ```
     composer install
     npm ci
     npm run build
     ```
-4. Seeding in data (for SQLite) 
-    ```
-    touch database/database.sqlite
-    php artisan migrate:fresh --seed
-    ```
-
+5. Seeding in the data
+   ```
+   php artisan migrate:fresh --seed
+   ```
 ## Running the application
+linux:
 ```
 php artisan serve & npm run dev
+```
+windows:
+```
+npm i concurrently -g
+concurrently "php artisan serve" "npm run dev"
+```
+or just
+```
+php artisan serve
 ```
