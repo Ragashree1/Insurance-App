@@ -14,6 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        // dd(User::all());
         return Inertia::render('Users/Index', ['users' => User::all()]);
     }
 
