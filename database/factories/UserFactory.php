@@ -20,15 +20,16 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'username' => $this->faker->name(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'dob' => $this->faker->date('d-m-Y', '31-12-2014'),
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'contact' => $this->faker->phoneNumber(),
+            'status' => 'active',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'two_factor_secret' => null,
-            'two_factor_recovery_codes' => null,
-            'remember_token' => Str::random(10),
             'profile_photo_path' => null,
-            'profile_id' => null,
+            'user_profile_id' => 1,
         ];
     }
 

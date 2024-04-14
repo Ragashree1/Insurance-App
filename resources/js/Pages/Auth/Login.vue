@@ -16,6 +16,7 @@ defineProps({
 const form = useForm({
     email: '',
     password: '',
+    user_profile_id: '',
     remember: false,
 });
 
@@ -51,7 +52,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     required
                     autofocus
-                    autocomplete="username"
+                    autocomplete="email"
                 />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
@@ -66,6 +67,18 @@ const submit = () => {
                     required
                     autocomplete="current-password"
                 />
+                <InputError class="mt-2" :message="form.errors.password" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="profile" value="Role" />
+                <select class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" v-model="form.user_profile_id">
+                    <option value="1">System Admin</option>
+                    <option value="2">Real Estate Agent</option>
+                    <option value="3">Seller</option>
+                    <option value="4">Buyer</option>
+                
+                </select>
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 

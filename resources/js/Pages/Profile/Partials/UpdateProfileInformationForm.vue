@@ -15,7 +15,7 @@ const props = defineProps({
 
 const form = useForm({
     _method: 'PUT',
-    name: props.user.name,
+    username: props.user.username,
     email: props.user.email,
     photo: null,
 });
@@ -130,16 +130,16 @@ const clearPhotoFileInput = () => {
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="username" value="username" />
                 <TextInput
-                    id="name"
-                    v-model="form.name"
+                    id="username"
+                    v-model="form.username"
                     type="text"
                     class="mt-1 block w-full"
                     required
-                    autocomplete="name"
+                    autocomplete="username"
                 />
-                <InputError :message="form.errors.name" class="mt-2" />
+                <InputError :message="form.errors.username" class="mt-2" />
             </div>
 
             <!-- Email -->
