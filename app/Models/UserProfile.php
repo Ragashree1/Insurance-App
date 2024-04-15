@@ -10,6 +10,8 @@ class UserProfile extends Model
     use HasFactory;
 
     protected $table = 'user_profile';
+    const CREATED_AT = 'create_date';
+    const UPDATED_AT = null; 
 
      /**
      * The attributes that are mass assignable.

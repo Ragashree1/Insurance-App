@@ -28,7 +28,8 @@ return new class extends Migration
             $table->string('residence_country', 50)->nullable();
             $table->integer('created_by')->nullable();
             $table->foreign('user_profile_id')->nullable()->references('id')->on('user_profile')->nullOnDelete();
-            $table->timestamps();
+            $table->timestamp('create_date')->nullable();
+            // $table->timestamps();
         });
     }
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\UserProfileSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Jetstream\Features;
 use Tests\TestCase;
@@ -10,6 +11,12 @@ use Tests\TestCase;
 class DeleteAccountTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(UserProfileSeeder::class);
+    }
 
     public function test_user_accounts_can_be_deleted(): void
     {
