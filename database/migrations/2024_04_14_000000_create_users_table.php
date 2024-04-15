@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email', 50)->unique();
             $table->string('contact', 50)->unique();
             $table->string('password');
-            $table->integer('user_profile_id')->nullable();
+            $table->unsignedBigInteger('user_profile_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->rememberToken();
             $table->enum('status', ['active', 'suspended']);

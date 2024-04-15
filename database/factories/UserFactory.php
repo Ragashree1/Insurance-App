@@ -23,7 +23,7 @@ class UserFactory extends Factory
             'username' => $this->faker->name(),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
-            'dob' => $this->faker->date('d-m-Y', '31-12-2014'),
+            'dob' => $this->faker->date('Y-m-d', '2014-12-31'),
             'email' => $this->faker->unique()->safeEmail(),
             'contact' => $this->faker->phoneNumber(),
             'status' => 'active',
