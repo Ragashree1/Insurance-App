@@ -20,15 +20,17 @@ return new class extends Migration
             $table->string('email', 50)->unique();
             $table->string('contact', 50)->unique();
             $table->string('password');
-            $table->integer('user_profile_id')->nullable();
+            $table->unsignedBigInteger('user_profile_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->rememberToken();
             $table->enum('status', ['active', 'suspended']);
             $table->string('nationality', 50)->nullable();
             $table->string('residence_country', 50)->nullable();
             $table->integer('created_by')->nullable();
-            $table->foreign('user_profile_id')->nullable()->references('id')->on('user_profile')->nullOnDelete();
-            $table->timestamps();
+            $table->foreign('user_profile_id')->references('id')->on('user_profile')->nullOnDelete();
+            // $table->foreignId('user_profile_id')->constrained();
+            $table->timestamp('create_date')->nullable();
+            // $table->timestamps();
         });
     }
 

@@ -15,6 +15,9 @@ class User extends Authenticatable
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
+
+    const CREATED_AT = 'create_date';
+    const UPDATED_AT = null; 
     /**
      * The attributes that are mass assignable.
      *
