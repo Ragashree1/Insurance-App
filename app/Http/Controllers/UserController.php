@@ -28,10 +28,10 @@ class UserController extends Controller
     public function login()
     {
 
-        Request::validate([
-            'username' => ['nullable', 'max:50', Rule::unique('users')],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')],
-            'password' => ['nullable', 'string', Password::default(), 'confirmed'],
+        $validated = Request::validate([
+            'username' => ['nullable', 'max:50'],
+            'email' => ['required', 'max:50', 'email'],
+            'password' => ['nullable', 'string', Password::default()],
             'user_profile_id' => ['nullable'],
         ]);
     }
@@ -53,11 +53,12 @@ class UserController extends Controller
             'user_profile_id' => ['nullable'],
             'nationality' => ['nullable', 'max:50'],
             'residence_country' => ['nullable', 'max:50'],
-            'status' => ['required', 'max:50'],
+            'status' => ['nullable', 'max:50'],
             'dob' => ['required', 'date'],
             'photo' => ['nullable', 'image'],
         ]);
 
+        $validated['status'] = $validated['status'] ?? 'active';
         $validated['password'] = $validated['password'] ??  'password';
         $validated['password'] = Hash::make($validated['password']);
 
@@ -122,6 +123,43 @@ class UserController extends Controller
         }
 
         return Redirect::back()->with($messageType, $message);
+    }
+
+    public function suspendAccount(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->status = 'suspended';
+        $user->save();
+
+        $messageType = 'success';
+        $message = 'User suspended successfully';
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function activateAccount(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->status = 'active';
+        $user->save();
+
+        $messageType = 'success';
+        $message = 'User activated successfully';
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function assignRole(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->status = 'active';
+
+        $validated = Request::validate([
+            'user_profile_id' => ['nullable', 'integer'],
+        ]);
+
+        $user->user_profile_id = $validated['user_profile_id'];
+        $user->save();
     }
 
     /**
