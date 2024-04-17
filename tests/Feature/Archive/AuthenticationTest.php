@@ -48,6 +48,7 @@ class AuthenticationTest extends TestCase
         $this->post('/login', [
             'email' => $user->email,
             'password' => 'wrong-password',
+            'user_profile_id' => $user->user_profile_id,
         ]);
 
         $this->assertGuest();
