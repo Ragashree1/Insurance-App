@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_profile_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->rememberToken();
-            $table->enum('status', ['active', 'suspended']);
+            $table->enum('status', ['active', 'suspended'])->default('active');
             $table->string('nationality', 50)->nullable();
             $table->string('residence_country', 50)->nullable();
             $table->integer('created_by')->nullable();

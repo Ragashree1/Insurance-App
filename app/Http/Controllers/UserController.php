@@ -6,9 +6,11 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -19,15 +21,19 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('viewAny', User::class);
-        return Inertia::render('Users/Index', ['users' => User::where('user_profile_id', null)->orWhere('user_profile_id', '!=', 1)->get()]);
+        return Inertia::render('Users/Index', ['users' => User::with('userProfile')->where('user_profile_id', null)->orWhere('user_profile_id', '!=', 1)->get()]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function login()
     {
-        //
+
+        $validated = Request::validate([
+            'username' => ['nullable', 'max:50'],
+            'email' => ['required', 'max:50', 'email'],
+            'password' => ['nullable', 'string', Password::default()],
+            'user_profile_id' => ['nullable'],
+        ]);
     }
 
     /**
@@ -35,21 +41,37 @@ class UserController extends Controller
      */
     public function store()
     {
+
         $this->authorize('create', User::class);
-        Request::validate([
+        $validated = Request::validate([
             'username' => ['required', 'max:50', Rule::unique('users')],
             'first_name' => ['required', 'max:50'],
             'last_name' => ['required', 'max:50'],
             'email' => ['required', 'max:50', 'email', Rule::unique('users')],
             'contact' => ['required', 'max:50', Rule::unique('users')],
-            'password' => ['nullable'],
+            'password' => ['nullable', 'string', Password::default(), 'confirmed'],
+            'user_profile_id' => ['nullable'],
+            'nationality' => ['nullable', 'max:50'],
+            'residence_country' => ['nullable', 'max:50'],
+            'status' => ['nullable', 'max:50'],
+            'dob' => ['required', 'date'],
             'photo' => ['nullable', 'image'],
         ]);
 
-        $validated['photo_path'] = Request::file('photo') ? Request::file('photo')->store('users') : null;
+        $validated['status'] = $validated['status'] ?? 'active';
+        $validated['password'] = $validated['password'] ??  'password';
+        $validated['password'] = Hash::make($validated['password']);
+
+        $validated['profile_photo_path'] = Request::file('photo') ? Request::file('photo')->store('users') : null;
         $validated['created_by'] = Auth::user()->id;
 
-        Auth::user()->account->users()->create($validated);
+        $messageType = 'error';
+        $message =  'User not created';
+
+        if (User::create($validated)) {
+            $messageType = 'success';
+            $message =  'User created successfully';
+        }
 
         return Redirect::back()->with('success', 'User created.');
     }
@@ -63,19 +85,81 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        $this->authorize('update', $user);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update( User $user)
+    public function update(User $user)
     {
         $this->authorize('update', $user);
+        $validated = Request::validate([
+            'username' => ['required', 'max:50', Rule::unique('users')->ignore($user->id)],
+            'first_name' => ['required', 'max:50'],
+            'last_name' => ['required', 'max:50'],
+            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
+            'contact' => ['required', 'max:50', Rule::unique('users')->ignore($user->id)],
+            'password' => ['nullable', 'string', Password::default(), 'confirmed'],
+            'user_profile_id' => ['nullable'],
+            'nationality' => ['nullable', 'max:50'],
+            'residence_country' => ['nullable', 'max:50'],
+            'status' => ['required', 'max:50'],
+            'dob' => ['required', 'date'],
+            'photo' => ['nullable', 'image'],
+        ]);
+
+        $messageType = 'error';
+        $message =  'User not updated';
+
+        $validated['password'] = $validated['password'] ??  'password';
+
+        if (Request::get('password')) {
+            $validated['password'] = Hash::make($validated['password']);
+        }
+
+        $validated['profile_photo_path'] = Request::file('photo') ? Request::file('photo')->store('users') : null;
+        $validated['created_by'] = Auth::user()->id;
+
+        if ($user->update($validated) == true) {
+            $messageType = 'success';
+            $message =  'User updated successfully';
+        }
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function suspendAccount(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->status = 'suspended';
+        $user->save();
+
+        $messageType = 'success';
+        $message = 'User suspended successfully';
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function activateAccount(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->status = 'active';
+        $user->save();
+
+        $messageType = 'success';
+        $message = 'User activated successfully';
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function assignRole(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->status = 'active';
+
+        $validated = Request::validate([
+            'user_profile_id' => ['nullable', 'integer'],
+        ]);
+
+        $user->user_profile_id = $validated['user_profile_id'];
+        $user->save();
     }
 
     /**
@@ -84,5 +168,10 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);
+
+        $messageType = $user->delete() ? 'success' : 'error';
+        $message = $messageType == 'success' ? 'User deleted successfully' : 'Error deleting user';
+
+        return Redirect::back()->with($messageType, $message);
     }
 }

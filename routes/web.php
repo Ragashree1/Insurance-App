@@ -34,4 +34,8 @@ Route::middleware([
         return Inertia::render('Dashboard', ['profile' => Auth::user()->userProfile()->first()]);
     })->name('dashboard');
     Route::resource('/users', UserController::class);
+
+    Route::put('users/{user}/activate-account', [UserController::class, 'activateAccount'])->name('users.activate-account');
+    Route::put('users/{user}/suspend-account', [UserController::class, 'suspendAccount'])->name('users.suspend-account');
+    Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
 });
