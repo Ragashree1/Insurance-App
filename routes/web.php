@@ -38,4 +38,6 @@ Route::middleware([
     Route::put('users/{user}/activate-account', [UserController::class, 'activateAccount'])->name('users.activate-account');
     Route::put('users/{user}/suspend-account', [UserController::class, 'suspendAccount'])->name('users.suspend-account');
     Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
+
+    Route::resource('/userProfile', UserProfileController::class);
 });
