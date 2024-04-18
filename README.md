@@ -1,4 +1,4 @@
-# Insurance App
+# Real Estate App
 
 ## Setup
 Look at requirements.txt file
