@@ -19,6 +19,7 @@ class UserProfileController extends Controller
     {
         // Fetch all user profiles with their associated user profiles
         $userProfiles = UserProfile::all();
+        // dd($userProfiles);
 // Render the Inertia view and pass the data to it
         return Inertia::render('UserProfile/Index', ['userProfile' => $userProfiles]);
     }
