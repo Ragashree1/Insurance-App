@@ -16,7 +16,7 @@ import { initFlowbite } from 'flowbite';
 
 const props = defineProps(['userProfile']);
 const showModal = ref(false);
-const showAssignRoleModal = ref(false);
+const showDeleteConfirmModal = ref(false);
 
 const form = useForm({
     name: '',
@@ -30,19 +30,23 @@ function showEditModal(userprofile) {
     form.name = userprofile.name;
     form.description = userprofile.description;
     form.status = userprofile.status;
+    form.id = userprofile.id;
     showModal.value = true;
-
 }
 
 function showCreateUserProfileForm() {
     showModal.value = true;
 }
 
+function showDeleteConfirmation(){
+    showDeleteConfirmModal.value=true;
+}
+
 function closeModal() {
     form.clearErrors();
     form.reset();
     showModal.value = false;
-    showAssignRoleModal.value = false;
+    showDeleteConfirmModal.value = false;
 }
 
 function confirmCreateOrUpdate() {
@@ -64,38 +68,15 @@ function confirmCreateOrUpdate() {
         })
     }
 }
-function createProfile(userId) {
-    router.put(route('userprofile.createProfile', userId),
-        {
-            onFinish: () => {
-                closeModal();
-            }
-        })
-}
 
 function deleteProfile(userId) {
-    router.put(route('userprofile.deleteProfile', userId),
+    router.put(route('userProfile.delete', userId),
         {
             onFinish: () => {
                 closeModal();
             }
         })
 }
-/*
-function showAssignRoleForm(user) {
-    form.id = user.id;
-    form.user_profile_id = user.user_profile_id;
-    showAssignRoleModal.value = true;
-}
-
-function assignRole() {
-    form.put(route('users.assign-role', form.id), {
-        onSuccess: () => {
-            closeModal();
-        }
-    })
-}
-*/
 
 onMounted(() => initFlowbite())
 
@@ -125,8 +106,8 @@ onMounted(() => initFlowbite())
                             <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Description</th>
                             <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Status</th>
                             <th colspan=2
-                                class="bg-gray-50 py-3 px-1 pr-2 text-lg font-semibold tracking-wide text-left">
-                                Actions
+                                class="bg-gray-50 py-3 px-1 pr-2 text-lg font-semibold tracking-wide text-center">
+                                Action
                             </th>
                         </tr>
                     </thead>
@@ -138,7 +119,10 @@ onMounted(() => initFlowbite())
                             <td class="p-3 text-lg text-gray-700">{{ userProfile.status }}</td>
 
                             <td class="py-3 px-1 text-lg text-gray-700">
-                                <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer" />
+                                <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer" @click="showEditModal"/>
+                            </td>
+                            <td class="py-3 px-1 text-lg text-gray-700">
+                                <Icon icon="fluent:delete-28-filled" class="hover:text-red-500 hover:cursor-pointer" @click="showDeleteConfirmation"/>
                             </td>
 
                         </tr>
@@ -169,90 +153,15 @@ onMounted(() => initFlowbite())
                     <InputError class="mt-2" :message="form.errors.description" />
                 </div>
                 <div>
-                    <InputLabel for="status" value="status" />
-                    <!-- This need change to check box? -->
-                    <TextInput id="status" v-model="form.status" type="text" class="mt-1 block w-full" />
-                    <InputError class="mt-2" :message="form.errors.status" />
-                </div>
-            </div>
-            <!--
-            <div class="flex justify-around space-x-2 my-3">
-                <div class="w-full">
-                    <InputLabel for="dob" value="dob" />
-                    <TextInput id="dob" v-model="form.dob" type="date" class="mt-1 block w-full" />
-                    <InputError class="mt-2" :message="form.errors.dob" />
-                </div>
-                <div class="w-full">
-                    <InputLabel for="nationality" value="nationality" />
-                    <TextInput id="nationality" v-model="form.nationality" type="text" class="mt-1 block w-full" />
-                    <InputError class="mt-2" :message="form.errors.nationality" />
-                </div>
-                <div class="w-full">
-                    <InputLabel for="residence_country" value="residence country" />
-                    <TextInput id="residence_country" v-model="form.residence_country" type="text"
-                        class="mt-1 block w-full" />
-                    <InputError class="mt-2" :message="form.errors.residence_country" />
+                    <InputLabel for="status" class="block text-center mb-6" value="status" />
+                        <input id="active" v-model="form.status" type="checkbox" true-value="active" false-value="" >
+                        <label for="active" class="ml-2 mr-4 ">Active</label>
+                        <input id="inactive" v-model="form.status" type="checkbox" true-value="inactive" false-value="">
+                        <label for="inactive" class="ml-2">Inactive</label>
+                    <InputError class="mt-2" :message="form.errors.status" /> 
                 </div>
             </div>
 
-            <div class="flex justify-around space-x-2 my-3">
-                <div class="w-full">
-                    <InputLabel for="email" value="email" />
-                    <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required
-                        autofocus />
-                    <InputError class="mt-2" :message="form.errors.email" />
-                </div>
-                <div class="w-full">
-                    <InputLabel for="contact" value="contact" class="pb-1" />
-                    <VueTelInput
-                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                        :autoDefaultCountry="false" :value="form.contact" @input="updateNo"></VueTelInput>
-                    <InputError class="mt-2" :message="form.errors.contact" />
-                </div>
-            </div>
-
-            <div class="flex justify-around space-x-2 my-3">
-                <div class="w-full">
-                    <InputLabel for="password" value="new password" />
-                    <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" />
-                    <InputError class="mt-2" :message="form.errors.password" />
-                </div>
-
-                <div class="w-full">
-                    <InputLabel for="password" value="confirm password" />
-                    <TextInput id="password_confirmation" v-model="form.password_confirmation" type="password"
-                        class="mt-1 block w-full" />
-                    <InputError class="mt-2" :message="form.errors.password_confirmation" />
-                </div>            
-            </div>
---> <!-- <div class="mb-2">
-                <InputLabel for="user_profile_id" value="user profile" />
-                <select
-                    class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                    v-model="form.user_profile_id">
-                    <option value="1">System Admin</option>
-                    <option value="2">Real Estate Agent</option>
-                    <option value="3">Seller</option>
-                    <option value="4">Buyer</option>
-                </select>
-
-                <InputError class="mt-2" :message="form.errors.user_profile_id" />
-            </div> 
-
-            <template v-if="form.id != ''">
-                <div class="mb-2">
-                    <InputLabel for="status" value="status" />
-                    <select
-                        class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                        v-model="form.status">
-                        <option value="active">Active</option>
-                        <option value="suspended">Suspended</option>
-                    </select>
-                    <InputError class="mt-2" :message="form.errors.status" />
-                </div> -
-            </template>
-
-    -->
         </template>
 
         <template #footer>
@@ -268,40 +177,21 @@ onMounted(() => initFlowbite())
 
     </DialogModal>
 
-    <!---
-    <DialogModal :show="showAssignRoleModal" @close="closeModal">
+        <!-- Delete confirmation modal -->
+    <DialogModal :show="showDeleteConfirmModal" @close="closeModal">
         <template #title>
-            {{ 'Assign Role' }}
+            Confirmation
         </template>
         <template #content>
-            <div class="mb-2">
-                <InputLabel for="user_profile_id" value="user profile" />
-                <select
-                    class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                    v-model="form.user_profile_id">
-                    <option value="1">System Admin</option>
-                    <option value="2">Real Estate Agent</option>
-                    <option value="3">Seller</option>
-                    <option value="4">Buyer</option>
-                </select>
-
-                <InputError class="mt-2" :message="form.errors.user_profile_id" />
+            <p class="text-lg font-semibold mb-4">Are you sure you want to delete this profile?</p>
+            <div class="flex justify-end">
+                <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 mr-2" @click="deleteProfile">Delete</button>
+                <button class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400" @click="closeModal">Cancel</button>
             </div>
-
-        
         </template>
-    
-        <template #footer>
-            <SecondaryButton @click="closeModal">
-                Cancel
-            </SecondaryButton>
-
-            <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
-                @click="assignRole">
-                Submit
-            </PrimaryButton>
-        </template>
-
     </DialogModal>
--->
+
+
+
+
 </template>
