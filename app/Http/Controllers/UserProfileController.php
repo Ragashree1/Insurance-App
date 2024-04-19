@@ -20,12 +20,12 @@ class UserProfileController extends Controller
         // Fetch all user profiles with their associated user profiles
         $userProfiles = UserProfile::all();
         // dd($userProfiles);
-// Render the Inertia view and pass the data to it
         return Inertia::render('UserProfile/Index', ['userProfile' => $userProfiles]);
     }
 
     /**
      * Show the form for creating a new resource.
+     * I dont get it...
      */
     public function create(UserProfile $userProfile)
     {
@@ -38,14 +38,20 @@ class UserProfileController extends Controller
      */
     public function store(StoreUserProfileRequest $request)
     {
+        $this->authorize('create', UserProfile::class);
         $validated = $request->validate([
             'profile_name' => ['required', 'max:50'],
             'description'=> ['nullable','string'],
             'status' => ['required', 'in:active,inactive']
         ]);
+        
+        $messageType = 'error';
+        $message =  'User not created';
 
-        $messageType = 'success';
-        $message =  'User created successfully';
+        if (UserProfile::create($validated)) {
+            $messageType = 'success';
+            $message =  'User Profile created successfully';
+        }
 
         return Redirect::back()->with('success', 'User Profile created.');
     }
@@ -69,17 +75,22 @@ class UserProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserProfileRequest $request, UserProfile $userProfile)
+    public function update(UserProfile $userProfile)
     {
         $this->authorize('update', $userProfile);
-        $validated = $request->validate([
-            'profile_name' => ['required', 'max:50'],
+        $validated = Request::validate([
+            'profile_name' => ['required', 'max:50', Rule::unique('userProfile')->ignore($user->id)],
             'description'=> ['nullable','string'],
             'status' => ['required', 'in:active,inactive']
         ]);
 
-        $messageType = 'success';
-        $message =  'User Profile updated successfully';
+        $messageType = 'error';
+        $message =  'User Profile not updated';
+
+        if ($userProfile->update($validated) == true) {
+            $messageType = 'success';
+            $message =  'User Profile updated successfully';
+        }
 
         return Redirect::back()->with($messageType, $message);
     }
