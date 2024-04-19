@@ -37,6 +37,8 @@ class UserController extends Controller
             'password' => ['nullable', 'string', Password::default()],
             'user_profile_id' => ['nullable'],
         ]);
+
+        
     }
 
     /**

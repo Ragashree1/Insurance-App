@@ -14,8 +14,6 @@ class SystemAdminLoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    const PASS = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; //password
-
     protected function setUp(): void
     {
 
@@ -25,7 +23,7 @@ class SystemAdminLoginTest extends TestCase
 
     public function test_system_admin_can_log_in(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '1', 'password' => self::PASS]);
+        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password']);
 
         $response = $this->post('/login', [
             'email' => $user->email,
@@ -40,7 +38,7 @@ class SystemAdminLoginTest extends TestCase
 
     public function test_system_admin_cannot_login_with_incorrect_credentials(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '1', 'password' => self::PASS]);
+        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password']);
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
@@ -53,7 +51,7 @@ class SystemAdminLoginTest extends TestCase
 
     public function test_system_admin_cannot_login_without_password(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '1', 'password' => self::PASS]);
+        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password']);
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,

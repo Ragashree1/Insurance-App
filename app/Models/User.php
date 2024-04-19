@@ -21,6 +21,65 @@ class User extends Authenticatable
 
     const CREATED_AT = 'create_date';
     const UPDATED_AT = null;
+
+
+
+
+    public function __construct($variables = null)
+    {
+        parent::__construct();
+
+        if ($variables) {
+            if (isset($variables['username'])) {
+                $this->username = $variables['username'];
+            }
+            if (isset($variables['first_name'])) {
+                $this->first_name = $variables['first_name'];
+            }
+            if (isset($variables['last_name'])) {
+                $this->last_name = $variables['last_name'];
+            }
+            if (isset($variables['email'])) {
+                $this->email = $variables['email'];
+            }
+            if (isset($variables['contact'])) {
+                $this->contact = $variables['contact'];
+            }
+            if (isset($variables['password'])) {
+                $this->password = bcrypt($variables['password']); // Make sure to hash passwords
+            } else {
+                $this->password = bcrypt('password');
+            }
+            if (isset($variables['user_profile_id'])) {
+                $this->user_profile_id = $variables['user_profile_id'];
+            }
+            if (isset($variables['nationality'])) {
+                $this->nationality = $variables['nationality'];
+            }
+            if (isset($variables['residence_country'])) {
+                $this->residence_country = $variables['residence_country'];
+            }
+            if (isset($variables['status'])) {
+                $this->status = $variables['status'];
+            } else {
+                $this->status = 'active';
+            }
+            if (isset($variables['dob'])) {
+                $this->dob = $variables['dob'];
+            }
+            if (isset($variables['profile_photo_path'])) {
+                $this->profile_photo_path = $variables['profile_photo_path'];
+            }
+            if (isset($variables['created_by'])) {
+                $this->created_by = Auth::user()->id;
+            }
+            if (Request::hasFile('photo')) {
+                $photoPath = Request::file('photo')->store('users');
+                $this->profile_photo_path = $photoPath;
+            }
+            // $this->create_date = 
+        }
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -125,7 +184,6 @@ class User extends Authenticatable
                 $this->profile_photo_path = $photoPath;
             }
 
-            $this->save();
             return true;
         } catch (\Exception $e) {
             return false;
@@ -135,55 +193,7 @@ class User extends Authenticatable
     public static function createUserAccount($variables)
     {
         try {
-            $user = new User;
-
-            if (isset($variables['username'])) {
-                $user->username = $variables['username'];
-            }
-            if (isset($variables['first_name'])) {
-                $user->first_name = $variables['first_name'];
-            }
-            if (isset($variables['last_name'])) {
-                $user->last_name = $variables['last_name'];
-            }
-            if (isset($variables['email'])) {
-                $user->email = $variables['email'];
-            }
-            if (isset($variables['contact'])) {
-                $user->contact = $variables['contact'];
-            }
-            if (isset($variables['password'])) {
-                $user->password = bcrypt($variables['password']); // Make sure to hash passwords
-            } else {
-                $user->password = bcrypt('password');
-            }
-            if (isset($variables['user_profile_id'])) {
-                $user->user_profile_id = $variables['user_profile_id'];
-            }
-            if (isset($variables['nationality'])) {
-                $user->nationality = $variables['nationality'];
-            }
-            if (isset($variables['residence_country'])) {
-                $user->residence_country = $variables['residence_country'];
-            }
-            if (isset($variables['status'])) {
-                $user->status = $variables['status'];
-            } else {
-                $user->status = 'active';
-            }
-            if (isset($variables['dob'])) {
-                $user->dob = $variables['dob'];
-            }
-            if (isset($variables['profile_photo_path'])) {
-                $user->profile_photo_path = $variables['profile_photo_path'];
-            }
-            if (isset($variables['created_by'])) {
-                $user->created_by = Auth::user()->id;
-            }
-            if (Request::hasFile('photo')) {
-                $photoPath = Request::file('photo')->store('users');
-                $user->profile_photo_path = $photoPath;
-            }
+            $user = new User($variables);
             $user->save();
             return $user;
         } catch (\Exception $e) {
