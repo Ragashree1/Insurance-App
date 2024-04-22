@@ -6,6 +6,7 @@ use App\Http\Controllers\DeleteUserController;
 use App\Http\Controllers\SuspendUserController;
 use App\Http\Controllers\UpdateUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ViewUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +52,5 @@ Route::middleware([
     Route::put('users/{user}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
     Route::put('users/{user}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
     Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
-
-
-    
+    Route::resource('/userProfile', UserProfileController::class);
 });
