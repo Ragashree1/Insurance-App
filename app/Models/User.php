@@ -22,8 +22,7 @@ class User extends Authenticatable
     const CREATED_AT = 'create_date';
     const UPDATED_AT = null;
 
-
-
+    //testing
 
     public function __construct($variables = null)
     {
