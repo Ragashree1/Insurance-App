@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('description');
             $table->enum('status', ['active', 'inactive']);
             $table->timestamp('create_date')->nullable();
-            $table->timestamp('last_modified');
         });
     }
 
