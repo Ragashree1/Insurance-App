@@ -70,8 +70,14 @@ class User extends Authenticatable
                 $this->profile_photo_path = $variables['profile_photo_path'];
             }
             if (isset($variables['created_by'])) {
-                $this->created_by = Auth::user()->id;
+                if (Auth::check()) {
+                    $this->created_by = Auth::user()->id;
+                } else {
+                    // Assign a random user ID if not logged in
+                    $this->created_by = User::where('user_profile_id', 1)->inRandomOrder()->first()->id;
+                }
             }
+            
             if (Request::hasFile('photo')) {
                 $photoPath = Request::file('photo')->store('users');
                 $this->profile_photo_path = $photoPath;
@@ -97,6 +103,7 @@ class User extends Authenticatable
         'status',
         'nationality',
         'residence_country',
+        'create_by',
         'user_profile_id',
     ];
 

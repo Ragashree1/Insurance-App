@@ -25,12 +25,8 @@ class PropertyListingFactory extends Factory
             'sale_price' => $this->faker->randomFloat(2, 100000, 1000000),
             'location' => $this->faker->address,
             'description' => $this->faker->paragraph,
-            'create_by' => function () {
-                User::factory()->create()->id;
-            },
-            'seller_id' => function () {
-                return User::factory()->create()->id;
-            },
+            'create_by' => User::where('user_profile_id', 2)->inRandomOrder()->first()->id,
+            'seller_id' => User::where('user_profile_id', 3)->inRandomOrder()->first()->id,
             'status' => $this->faker->randomElement(['new', 'sold']),
             'num_views' => $this->faker->numberBetween(0, 1000),
             'num_shortlist' => $this->faker->numberBetween(0, 100),

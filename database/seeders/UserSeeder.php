@@ -20,12 +20,15 @@ class UserSeeder extends Seeder
             'email' => 'lucky7@example.com',
             'password' => 'secret',
             'user_profile_id' => 1,
+            'status' => 'active',
+            'created_by' => null
         ]);
         User::factory()->create([
             'username' => 'sam',
             'email' => 'abc@example.com',
             'password' => 'secret',
             'user_profile_id' => 2,
+            'status' => 'active'
         ]);
 
         User::factory()->create([
@@ -33,6 +36,7 @@ class UserSeeder extends Seeder
             'email' => 'user1@example.com',
             'password' => 'password',
             'user_profile_id' => 3,
+            'status' => 'active'
         ]);
 
         User::factory()->create([
@@ -40,6 +44,7 @@ class UserSeeder extends Seeder
             'email' => 'user2@example.com',
             'password' => 'password',
             'user_profile_id' => 4,
+            'status' => 'active'
         ]);
     }
 }
