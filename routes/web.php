@@ -26,7 +26,7 @@ use Inertia\Inertia;
 
 // Route::get('/', [\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class, 'login']);
 
-
+//comment
 Route::get('/', function () {
     return Inertia::render('Auth/Login', [
         'canLogin' => Route::has('login'),
