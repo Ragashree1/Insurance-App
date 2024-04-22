@@ -183,6 +183,8 @@ class User extends Authenticatable
                 $this->profile_photo_path = $photoPath;
             }
 
+            $this->save();
+
             return true;
         } catch (\Exception $e) {
             return false;
@@ -200,7 +202,7 @@ class User extends Authenticatable
         }
     }
 
-    public function suspendUserAccount()
+    public function suspendAccount()
     {
         try {
             $this->user = 'suspended';
@@ -211,7 +213,7 @@ class User extends Authenticatable
         }
     }
 
-    public function activateUserAccount()
+    public function activateAccount()
     {
         try {
             $this->user = 'activate';

@@ -22,25 +22,11 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('viewAny', User::class);
-        return Inertia::render('Users/Index', ['users' => User::with('userProfile')->where('user_profile_id', null)->orWhere('user_profile_id', '!=', 1)->get(), 'userProfile' => UserProfile::all()]);
-
-        // UserProfile::all()
+        return Inertia::render('Users/Index', ['users' => User::with('userProfile')->where('user_profile_id', null)->orWhere('user_profile_id', '!=', 1)->get()]);
     }
 
 
-    public function login()
-    {
-
-        $validated = Request::validate([
-            'username' => ['nullable', 'max:50'],
-            'email' => ['required', 'max:50', 'email'],
-            'password' => ['nullable', 'string', Password::default()],
-            'user_profile_id' => ['nullable'],
-        ]);
-
-        
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      */

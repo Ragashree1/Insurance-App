@@ -1,6 +1,12 @@
 <?php
 
+use App\Http\Controllers\ActivateUserController;
+use App\Http\Controllers\CreateUserController;
+use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\SuspendUserController;
+use App\Http\Controllers\UpdateUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViewUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,9 +42,16 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard', ['profile' => Auth::user()->userProfile()->first()]);
     })->name('dashboard');
-    Route::resource('/users', UserController::class);
+    // Route::resource('/users', UserController::class);
+    Route::post('/users', [CreateUserController::class, 'store'])->name('users.store');
+    Route::get('/users', [ViewUserController::class, 'viewUsers'])->name('users.index');
+    Route::put('/users/{user}/update', [UpdateUserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
 
-    Route::put('users/{user}/activate-account', [UserController::class, 'activateAccount'])->name('users.activate-account');
-    Route::put('users/{user}/suspend-account', [UserController::class, 'suspendAccount'])->name('users.suspend-account');
+    Route::put('users/{user}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
+    Route::put('users/{user}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
     Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
+
+
+    
 });
