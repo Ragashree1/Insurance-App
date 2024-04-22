@@ -23,24 +23,15 @@ class UserProfileController extends Controller
         return Inertia::render('UserProfile/Index', ['userProfile' => $userProfiles]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * I dont get it...
-     */
-    public function create(UserProfile $userProfile)
-    {
-        $this->authorize('view', $userProfile);
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreUserProfileRequest $request)
     {
-        $this->authorize('create', UserProfile::class);
+        //$this->authorize('create', UserProfile::class);
         $validated = $request->validate([
-            'profile_name' => ['required', 'max:50'],
+            'name' => ['required', 'max:50'],
             'description'=> ['nullable','string'],
             'status' => ['required', 'in:active,inactive']
         ]);
@@ -79,7 +70,7 @@ class UserProfileController extends Controller
     {
         $this->authorize('update', $userProfile);
         $validated = Request::validate([
-            'profile_name' => ['required', 'max:50', Rule::unique('userProfile')->ignore($user->id)],
+            'name' => ['required', 'max:50', Rule::unique('user_profile')->ignore($userProfile->id)],
             'description'=> ['nullable','string'],
             'status' => ['required', 'in:active,inactive']
         ]);
@@ -100,9 +91,9 @@ class UserProfileController extends Controller
      */
     public function destroy(UserProfile $userProfile)
     {
-        $this->authorize('delete', $userProfile);
+        //$this->authorize('delete', $userProfile);
 
-        $messageType = $user->delete() ? 'success' : 'error';
+        $messageType = $userProfile->delete() ? 'success' : 'error';
         $message = $messageType == 'success' ? 'User Profile deleted successfully' : 'Error deleting user';
 
         return Redirect::back()->with($messageType, $message);

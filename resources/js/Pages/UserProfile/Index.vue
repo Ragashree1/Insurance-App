@@ -19,6 +19,7 @@ const showModal = ref(false);
 const showDeleteConfirmModal = ref(false);
 
 const form = useForm({
+    id:'',
     name: '',
     description: '',
     status: '',
@@ -38,7 +39,8 @@ function showCreateUserProfileForm() {
     showModal.value = true;
 }
 
-function showDeleteConfirmation(){
+function showDeleteConfirmation(userprofile){
+    form.id = userprofile.id;
     showDeleteConfirmModal.value=true;
 }
 
@@ -51,6 +53,7 @@ function closeModal() {
 
 function confirmCreateOrUpdate() {
     if (form.id == '') {
+        console.log(form);
         form.post(route('userProfile.store'), {
             onSuccess: () => {
                 closeModal();
@@ -69,8 +72,8 @@ function confirmCreateOrUpdate() {
     }
 }
 
-function deleteProfile(userId) {
-    router.put(route('userProfile.delete', userId),
+function deleteProfile() {
+    router.delete(route('userProfile.destroy', form.id),
         {
             onFinish: () => {
                 closeModal();
@@ -119,10 +122,10 @@ onMounted(() => initFlowbite())
                             <td class="p-3 text-lg text-gray-700">{{ userProfile.status }}</td>
 
                             <td class="py-3 px-1 text-lg text-gray-700">
-                                <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer" @click="showEditModal"/>
+                                <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer" @click="showEditModal(userProfile)"/>
                             </td>
                             <td class="py-3 px-1 text-lg text-gray-700">
-                                <Icon icon="fluent:delete-28-filled" class="hover:text-red-500 hover:cursor-pointer" @click="showDeleteConfirmation"/>
+                                <Icon icon="fluent:delete-28-filled" class="hover:text-red-500 hover:cursor-pointer" @click="showDeleteConfirmation(userProfile)"/>
                             </td>
 
                         </tr>
