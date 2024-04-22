@@ -33,7 +33,7 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-gray-100 ">
+        <div class="min-h-screen bg-gray-100 text-lg">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,6 +54,9 @@ const logout = () => {
                                 <template v-if="$page.props.auth.user.user_profile_id == 1">
                                     <NavLink :href="route('users.index')" :active="route().current('users.index')">
                                         User accounts
+                                    </NavLink>
+                                    <NavLink :href="route('userProfile.index')" :active="route().current('userProfile.index')">
+                                        User Profile
                                     </NavLink>
                                 </template>
                             </div>

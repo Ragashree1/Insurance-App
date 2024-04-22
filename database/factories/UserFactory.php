@@ -25,9 +25,9 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName(),
             'dob' => $this->faker->date('Y-m-d', '2014-12-31'),
             'email' => $this->faker->unique()->safeEmail(),
-            'contact' => $this->faker->phoneNumber(),
+            'contact' => $this->faker->PhoneNumber(),
             'status' => 'active',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => 'password',
             'profile_photo_path' => null,
             'user_profile_id' => null,
         ];

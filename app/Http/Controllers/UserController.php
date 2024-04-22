@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -25,17 +26,7 @@ class UserController extends Controller
     }
 
 
-    public function login()
-    {
-
-        Request::validate([
-            'username' => ['nullable', 'max:50', Rule::unique('users')],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')],
-            'password' => ['nullable', 'string', Password::default(), 'confirmed'],
-            'user_profile_id' => ['nullable'],
-        ]);
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      */
@@ -53,21 +44,19 @@ class UserController extends Controller
             'user_profile_id' => ['nullable'],
             'nationality' => ['nullable', 'max:50'],
             'residence_country' => ['nullable', 'max:50'],
-            'status' => ['required', 'max:50'],
+            'status' => ['nullable', 'max:50'],
             'dob' => ['required', 'date'],
             'photo' => ['nullable', 'image'],
         ]);
 
-        $validated['password'] = $validated['password'] ??  'password';
-        $validated['password'] = Hash::make($validated['password']);
-
         $validated['profile_photo_path'] = Request::file('photo') ? Request::file('photo')->store('users') : null;
-        $validated['created_by'] = Auth::user()->id;
 
         $messageType = 'error';
         $message =  'User not created';
 
-        if (User::create($validated)) {
+        $response = User::createUserAccount($validated);
+
+        if ($response) {
             $messageType = 'success';
             $message =  'User created successfully';
         }
@@ -107,19 +96,47 @@ class UserController extends Controller
         $messageType = 'error';
         $message =  'User not updated';
 
-        $validated['password'] = $validated['password'] ??  'password';
-
-        if (Request::get('password')) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $validated['profile_photo_path'] = Request::file('photo') ? Request::file('photo')->store('users') : null;
-        $validated['created_by'] = Auth::user()->id;
-
-        if ($user->update($validated) == true) {
+        if ($user->updateUserAccount($validated) == true) {
             $messageType = 'success';
             $message =  'User updated successfully';
         }
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function suspendAccount(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->suspendAccount();
+
+        $messageType = 'success';
+        $message = 'User suspended successfully';
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function activateAccount(User $user)
+    {
+        $this->authorize('update', $user);
+        $user->activateAccount();
+
+        $messageType = 'success';
+        $message = 'User activated successfully';
+
+        return Redirect::back()->with($messageType, $message);
+    }
+
+    public function assignRole(User $user)
+    {
+        $this->authorize('update', $user);
+
+        $validated = Request::validate([
+            'user_profile_id' => ['nullable', 'integer'],
+        ]);
+
+        $user->assignRole($validated['user_profile_id']);
+        $messageType = 'success';
+        $message = 'User role assigned successfully';
 
         return Redirect::back()->with($messageType, $message);
     }
@@ -131,7 +148,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        $messageType = $user->delete() ? 'success' : 'error';
+        $messageType = User::deleteUserAccount($user) ? 'success' : 'error';
         $message = $messageType == 'success' ? 'User deleted successfully' : 'Error deleting user';
 
         return Redirect::back()->with($messageType, $message);
