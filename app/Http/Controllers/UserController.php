@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -25,17 +26,7 @@ class UserController extends Controller
     }
 
 
-    public function login()
-    {
-
-        $validated = Request::validate([
-            'username' => ['nullable', 'max:50'],
-            'email' => ['required', 'max:50', 'email'],
-            'password' => ['nullable', 'string', Password::default()],
-            'user_profile_id' => ['nullable'],
-        ]);
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      */
@@ -58,17 +49,14 @@ class UserController extends Controller
             'photo' => ['nullable', 'image'],
         ]);
 
-        $validated['status'] = $validated['status'] ?? 'active';
-        $validated['password'] = $validated['password'] ??  'password';
-        $validated['password'] = Hash::make($validated['password']);
-
         $validated['profile_photo_path'] = Request::file('photo') ? Request::file('photo')->store('users') : null;
-        $validated['created_by'] = Auth::user()->id;
 
         $messageType = 'error';
         $message =  'User not created';
 
-        if (User::create($validated)) {
+        $response = User::createUserAccount($validated);
+
+        if ($response) {
             $messageType = 'success';
             $message =  'User created successfully';
         }
@@ -108,16 +96,7 @@ class UserController extends Controller
         $messageType = 'error';
         $message =  'User not updated';
 
-        $validated['password'] = $validated['password'] ??  'password';
-
-        if (Request::get('password')) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $validated['profile_photo_path'] = Request::file('photo') ? Request::file('photo')->store('users') : null;
-        $validated['created_by'] = Auth::user()->id;
-
-        if ($user->update($validated) == true) {
+        if ($user->updateUserAccount($validated) == true) {
             $messageType = 'success';
             $message =  'User updated successfully';
         }
@@ -128,8 +107,7 @@ class UserController extends Controller
     public function suspendAccount(User $user)
     {
         $this->authorize('update', $user);
-        $user->status = 'suspended';
-        $user->save();
+        $user->suspendAccount();
 
         $messageType = 'success';
         $message = 'User suspended successfully';
@@ -140,8 +118,7 @@ class UserController extends Controller
     public function activateAccount(User $user)
     {
         $this->authorize('update', $user);
-        $user->status = 'active';
-        $user->save();
+        $user->activateAccount();
 
         $messageType = 'success';
         $message = 'User activated successfully';
@@ -152,14 +129,16 @@ class UserController extends Controller
     public function assignRole(User $user)
     {
         $this->authorize('update', $user);
-        $user->status = 'active';
 
         $validated = Request::validate([
             'user_profile_id' => ['nullable', 'integer'],
         ]);
 
-        $user->user_profile_id = $validated['user_profile_id'];
-        $user->save();
+        $user->assignRole($validated['user_profile_id']);
+        $messageType = 'success';
+        $message = 'User role assigned successfully';
+
+        return Redirect::back()->with($messageType, $message);
     }
 
     /**
@@ -169,7 +148,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        $messageType = $user->delete() ? 'success' : 'error';
+        $messageType = User::deleteUserAccount($user) ? 'success' : 'error';
         $message = $messageType == 'success' ? 'User deleted successfully' : 'Error deleting user';
 
         return Redirect::back()->with($messageType, $message);

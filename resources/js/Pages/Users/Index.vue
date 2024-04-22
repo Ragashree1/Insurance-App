@@ -14,7 +14,7 @@ import { VueTelInput } from 'vue3-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 import { initFlowbite } from 'flowbite';
 
-const props = defineProps(['users']);
+const props = defineProps(['users', 'userProfile']);
 const showModal = ref(false);
 const showAssignRoleModal = ref(false);
 
@@ -70,6 +70,7 @@ function updateNo(phone, phoneObject, input) {
     }
 }
 
+
 function confirmCreateOrUpdate() {
     if (form.id == '') {
         form.post(route('users.store'), {
@@ -121,6 +122,10 @@ function assignRole() {
     })
 }
 
+function deleteUser($user) {
+    router.delete(route('users.destroy', $user));
+}
+
 onMounted(() => initFlowbite())
 
 </script>
@@ -131,7 +136,6 @@ onMounted(() => initFlowbite())
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 User Accounts
             </h2>
-
 
         </template>
         <div class="p-7 h-screen">
@@ -177,7 +181,7 @@ onMounted(() => initFlowbite())
                                     <div :id="'user' + id"
                                         class="z-50 ml-10 absolute flex flex-col justify-end hidden py-1 mb-4 space-y-2 bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                                         <ul class="text-sm text-gray-500 dark:text-gray-300">
-                                            <li>
+                                            <!-- <li>
                                                 <span
                                                     class="flex items-center px-5 py-2 border-b border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white dark:border-gray-600">
 
@@ -185,7 +189,7 @@ onMounted(() => initFlowbite())
                                                         @click="showAssignRoleForm(user)">Assign
                                                         Role</span>
                                                 </span>
-                                            </li>
+                                            </li> -->
                                             <li>
                                                 <span
                                                     class="flex items-center px-5 py-2 border-b border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white dark:border-gray-600">
@@ -304,7 +308,7 @@ onMounted(() => initFlowbite())
                     <InputError class="mt-2" :message="form.errors.password_confirmation" />
                 </div>
             </div>
-            <!-- <div class="mb-2">
+            <div class="mb-2">
                 <InputLabel for="user_profile_id" value="user profile" />
                 <select
                     class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
@@ -316,7 +320,7 @@ onMounted(() => initFlowbite())
                 </select>
 
                 <InputError class="mt-2" :message="form.errors.user_profile_id" />
-            </div> -->
+            </div>
 
             <template v-if="form.id != ''">
                 <div class="mb-2">
