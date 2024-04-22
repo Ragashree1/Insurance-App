@@ -12,6 +12,6 @@ class PropertyListingSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        
     }
 }

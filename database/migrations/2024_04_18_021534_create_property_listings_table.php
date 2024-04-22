@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string("description");
             $table->foreignId('create_by')->constrained('users')->onDelete('cascade');
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['new', 'sold', 'reserve'])->default('new');
+            $table->unsignedInteger('num_views')->default(0);
+            $table->unsignedInteger('num_shortlist')->default(0);
             $table->timestamp('create_date')->nullable();
         });
     }
