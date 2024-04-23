@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\PropertyListing;
 use App\Http\Requests\StorePropertyListingRequest;
 use App\Http\Requests\UpdatePropertyListingRequest;
@@ -11,10 +12,49 @@ class PropertyListingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    // display all listing
+    public function allListings()
     {
-        //
+        return view('listings.allListings', [
+                'listings' => PropertyListing::allListings()
+            ]);
     }
+
+    // show single listing
+    public function viewListing(int $id)
+    {
+        // call methods in entity
+        $listing = PropertyListing::viewListing($id);
+
+        if($listing)
+        {
+            return view('listings.viewListing', [
+                'listing' => $listing
+            ]);
+        }
+        else
+        {
+            abort('404');
+        }
+    }
+
+    //search a listing
+    public function searchListings(Request $request)
+    {
+        $searchTerm = $request->input('search');
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+
+        $listings = PropertyListing::search($searchTerm)
+            ->filterByPriceRange($minPrice, $maxPrice)
+            ->latest('create_date')
+            ->get();
+        
+        return view('listings.allListings', ['listings' => $listings]);
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -28,14 +68,6 @@ class PropertyListingController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StorePropertyListingRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(PropertyListing $propertyListing)
     {
         //
     }
