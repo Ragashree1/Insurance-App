@@ -8,6 +8,8 @@ use App\Http\Controllers\UpdateUserController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ViewUserController;
+use App\Http\Controllers\MortgageController;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -54,3 +56,11 @@ Route::middleware([
     Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
     Route::resource('/userProfile', UserProfileController::class);
 });
+
+
+Route::get('/mortgage', function () {
+    return view('CalculateMortgage');
+})->name('mortgage');
+
+Route::post('/mortgage', [MortgageController::class, 'calculate'])->name('calculate');
+
