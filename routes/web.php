@@ -64,7 +64,6 @@ Route::get('/listings', [PropertyListingController::class, 'allListings'])->name
 // search a listing
 Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
 
-
 // view single listing
 Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
 

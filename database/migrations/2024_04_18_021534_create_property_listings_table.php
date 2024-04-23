@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('num_bathroom');
             $table->decimal('area', 8, 2); 
             $table->decimal('sale_price', 10, 2); 
-            $table->string("location");
+            $table->string("location")->unique();
             $table->text("description");
             $table->foreignId('create_by')->constrained('users')->onDelete('cascade');
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
