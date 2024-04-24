@@ -16,21 +16,24 @@ class PropertyListingController extends Controller
     // display all listing
     public function allListings()
     {
+        // call method in entity to get array of data
+        $listings = PropertyListing::allListings();
+
         return view('listings.allListings', [
-                'listings' => PropertyListing::allListings()
+                'listings' => $listings         //array passed to boundary
             ]);
     }
 
     // show single listing
     public function viewListing(int $id)
     {
-        // call methods in entity
+        // call methods in entity to get array
         $listing = PropertyListing::viewListing($id);
 
         if($listing)
         {
             return view('listings.viewListing', [
-                'listing' => $listing
+                'listing' => $listing       // array passed to boundary
             ]);
         }
         else
@@ -46,12 +49,10 @@ class PropertyListingController extends Controller
         $minPrice = $request->input('min_price');
         $maxPrice = $request->input('max_price');
 
-        $listings = PropertyListing::search($searchTerm)
-            ->filterByPriceRange($minPrice, $maxPrice)
-            ->latest('create_date')
-            ->get();
+        // calling scopeSearchListings of entity class, "scope" is omitted
+        $listings = PropertyListing::searchListings($searchTerm, $minPrice, $maxPrice);    
         
-        return view('listings.allListings', ['listings' => $listings]);
+        return view('listings.allListings', ['listings' => $listings]);         // array passed to boundary
     }
 
     

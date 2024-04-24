@@ -29,13 +29,13 @@ class PropertyListing extends Model
     ];
 
     // display all listings
-    public static function allListings()
+    public static function allListings(): array
     {
-        return static::query()->latest('create_date')->get();
+        return static::query()->latest('create_date')->get()->toArray();
     }
     
     // display one listing
-    public static function viewListing(int $id)
+    public static function viewListing(int $id): array
     {
         $listings = self::all();
 
@@ -43,35 +43,34 @@ class PropertyListing extends Model
         {
             if($listing['id'] == $id)
             {
-                return $listing;
+                return $listing->toArray();
             }
         }
     }
 
-    // search for a listing by text
-    public function scopeSearch($query, ?string $searchTerm)
+    public function scopeSearchListings($query, ?string $searchTerm, ?float $minPrice, ?float $maxPrice): array
     {
         if ($searchTerm) {
-            $query->where(function($query) use ($searchTerm) {
+            $query->where(function ($query) use ($searchTerm) {
                 $query->where('title', 'like', '%' . $searchTerm . '%')
                     ->orWhere('type', 'like', '%' . $searchTerm . '%')
                     ->orWhere('location', 'like', '%' . $searchTerm . '%')
                     ->orWhere('description', 'like', '%' . $searchTerm . '%');
             });
         }
-    }
-
-    // search for a listing by price 
-    public function scopeFilterByPriceRange($query, ?float $minPrice, ?float $maxPrice)
-    {
+    
         if ($minPrice) {
             $query->where('sale_price', '>=', $minPrice);
         }
-
+    
         if ($maxPrice) {
             $query->where('sale_price', '<=', $maxPrice);
         }
+    
+        // Order the results
+        $query->latest('create_date');
+    
+        return $query->get()->toArray();
     }
-
-
+    
 }
