@@ -15,6 +15,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ActivateUserController;
 use App\Http\Controllers\PropertyListingController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,6 +58,7 @@ Route::middleware([
     Route::resource('/userProfile', UserProfileController::class);
 });
 
+
 // ------------- Listings ------------------------
 // -- view all listings
 Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
@@ -66,5 +68,7 @@ Route::get('/listings/search', [PropertyListingController::class, 'searchListing
 
 // view single listing
 Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
+
+
 
 
