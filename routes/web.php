@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\ActivateUserController;
-use App\Http\Controllers\CreateUserController;
-use App\Http\Controllers\DeleteUserController;
-use App\Http\Controllers\SuspendUserController;
-use App\Http\Controllers\UpdateUserController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserProfileController;
-use App\Http\Controllers\ViewUserController;
-use App\Http\Controllers\MortgageController;
-
-use Illuminate\Foundation\Application;
+use Inertia\Inertia;
+use App\Models\PropertyListing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViewUserController;
+use App\Http\Controllers\CreateUserController;
+use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\UpdateUserController;
+use App\Http\Controllers\SuspendUserController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\ActivateUserController;
+use App\Http\Controllers\PropertyListingController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,9 +59,16 @@ Route::middleware([
 });
 
 
-Route::get('/mortgage', function () {
-    return view('CalculateMortgage');
-})->name('mortgage');
+// ------------- Listings ------------------------
+// -- view all listings
+Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
 
-Route::post('/mortgage', [MortgageController::class, 'calculate'])->name('calculate');
+// search a listing
+Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
+
+// view single listing
+Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
+
+
+
 

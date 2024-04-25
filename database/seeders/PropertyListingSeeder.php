@@ -15,6 +15,7 @@ class PropertyListingSeeder extends Seeder
     {
         PropertyListing::factory()->times(5)->create([
             'create_by' => 2,
+            'status' => 'new'
         ]);
     }
 }

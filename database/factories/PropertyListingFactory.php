@@ -18,13 +18,14 @@ class PropertyListingFactory extends Factory
     public function definition(): array
     {
         return [
-            'type' => $this->faker->randomElement(['House', 'Apartment', 'Condo']),
+            'type' => $this->faker->randomElement(['HDB', 'Condo', 'Bungalow']),
+            'title' => $this->faker->sentence,
             'num_bedroom' => $this->faker->numberBetween(1, 5),
             'num_bathroom' => $this->faker->numberBetween(1, 3),
             'area' => $this->faker->randomFloat(2, 500, 2000),
             'sale_price' => $this->faker->randomFloat(2, 100000, 1000000),
             'location' => $this->faker->address,
-            'description' => $this->faker->paragraph,
+            'description' => $this->faker->paragraph(5),
             'create_by' => User::where('user_profile_id', 2)->inRandomOrder()->first()->id,
             'seller_id' => User::where('user_profile_id', 3)->inRandomOrder()->first()->id,
             'status' => $this->faker->randomElement(['new', 'sold']),
