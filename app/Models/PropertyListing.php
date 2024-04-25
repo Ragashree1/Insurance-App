@@ -29,13 +29,13 @@ class PropertyListing extends Model
     ];
 
     // display all listings
-    public static function allListings()
+    public static function allListings(): array
     {
-        return static::query()->latest('create_date')->get();
+        return static::query()->latest('create_date')->get()->toArray();
     }
     
     // display one listing
-    public static function viewListing(int $id)
+    public static function viewListing(int $id): array
     {
         $listings = self::allListings();
 
@@ -43,12 +43,12 @@ class PropertyListing extends Model
         {
             if($listing['id'] == $id)
             {
-                return $listing;
+                return $listing->toArray();
             }
         }
     }
 
-    public function scopeSearchListings($query, ?string $searchTerm, ?float $minPrice, ?float $maxPrice)
+    public function scopeSearchListings($query, ?string $searchTerm, ?float $minPrice, ?float $maxPrice): array
     {
         if ($searchTerm) {
             $query->where(function ($query) use ($searchTerm) {
@@ -70,7 +70,7 @@ class PropertyListing extends Model
         // Order the results
         $query->latest('create_date');
     
-        return $query->get();
+        return $query->get()->toArray();
     }
     
 }
