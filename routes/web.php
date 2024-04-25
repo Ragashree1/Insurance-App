@@ -58,7 +58,7 @@ Route::middleware([
 });
 
 // ------------- Listings ------------------------
-// -- view all listings
+
 Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
 
 // search a listing

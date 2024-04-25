@@ -29,26 +29,26 @@ class PropertyListing extends Model
     ];
 
     // display all listings
-    public static function allListings(): array
+    public static function allListings()
     {
-        return static::query()->latest('create_date')->get()->toArray();
+        return static::query()->latest('create_date')->get();
     }
     
     // display one listing
-    public static function viewListing(int $id): array
+    public static function viewListing(int $id)
     {
-        $listings = self::all();
+        $listings = self::allListings();
 
         foreach($listings as $listing)
         {
             if($listing['id'] == $id)
             {
-                return $listing->toArray();
+                return $listing;
             }
         }
     }
 
-    public function scopeSearchListings($query, ?string $searchTerm, ?float $minPrice, ?float $maxPrice): array
+    public function scopeSearchListings($query, ?string $searchTerm, ?float $minPrice, ?float $maxPrice)
     {
         if ($searchTerm) {
             $query->where(function ($query) use ($searchTerm) {
@@ -70,7 +70,7 @@ class PropertyListing extends Model
         // Order the results
         $query->latest('create_date');
     
-        return $query->get()->toArray();
+        return $query->get();
     }
     
 }

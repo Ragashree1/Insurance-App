@@ -20,7 +20,7 @@ class PropertyListingController extends Controller
         $listings = PropertyListing::allListings();
 
         return view('listings.allListings', [
-                'listings' => $listings         //array passed to boundary
+                'listings' => $listings        
             ]);
     }
 
@@ -33,7 +33,7 @@ class PropertyListingController extends Controller
         if($listing)
         {
             return view('listings.viewListing', [
-                'listing' => $listing       // array passed to boundary
+                'listing' => $listing      
             ]);
         }
         else
@@ -52,7 +52,7 @@ class PropertyListingController extends Controller
         // calling scopeSearchListings of entity class, "scope" is omitted
         $listings = PropertyListing::searchListings($searchTerm, $minPrice, $maxPrice);    
         
-        return view('listings.allListings', ['listings' => $listings]);         // array passed to boundary
+        return view('listings.allListings', ['listings' => $listings]);    
     }
 
     
