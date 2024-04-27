@@ -200,7 +200,7 @@ class User extends Authenticatable
             $user->save();
             return $user;
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
     }
 

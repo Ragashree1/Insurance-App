@@ -46,7 +46,7 @@ class CreateUserController extends Controller
 
         $response = User::createUserAccount($validated);
 
-        if ($response) {
+        if ($response != null) {
             $messageType = 'success';
             $message =  'User created successfully';
         }
