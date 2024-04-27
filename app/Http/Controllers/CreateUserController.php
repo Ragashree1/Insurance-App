@@ -20,7 +20,7 @@ class CreateUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
+    public function createUser()
     {
 
         $this->authorize('create', User::class);

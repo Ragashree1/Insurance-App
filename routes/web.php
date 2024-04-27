@@ -44,7 +44,7 @@ Route::middleware([
         return Inertia::render('Dashboard', ['profile' => Auth::user()->userProfile()->first()]);
     })->name('dashboard');
     // Route::resource('/users', UserController::class);
-    Route::post('/users', [CreateUserController::class, 'store'])->name('users.store');
+    Route::post('/users', [CreateUserController::class, 'createUser'])->name('users.store');
     Route::get('/users', [ViewUserController::class, 'viewUsers'])->name('users.index');
     Route::put('/users/{id}/update', [UpdateUserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
