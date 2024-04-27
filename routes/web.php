@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivateUserController;
 use App\Http\Controllers\CreateUserController;
 use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\searchUserController;
 use App\Http\Controllers\SuspendUserController;
 use App\Http\Controllers\UpdateUserController;
 use App\Http\Controllers\UserController;
@@ -49,6 +50,7 @@ Route::middleware([
     Route::put('/users/{id}/update', [UpdateUserController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{id}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
 
+    Route::get('users/{name}', [searchUserController::class, 'searchUser'])->name('search-users');
     Route::put('users/{id}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
     Route::put('users/{id}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
     Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');

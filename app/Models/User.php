@@ -249,4 +249,9 @@ class User extends Authenticatable
 
         return true;
     }
+
+    public static function searchUser($name)
+    {
+        return User::where('username', 'like', $name.'%')->get();
+    }
 }
