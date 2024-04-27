@@ -37,7 +37,7 @@ const form = useForm({
     processing: false,
 })
 
-function showEditModal(user) {
+function showEditUserForm(user) {
     form.id = user.id;
     form.username = user.username;
     form.first_name = user.first_name;
@@ -173,7 +173,7 @@ onMounted(() => initFlowbite())
 
                             <td class="py-3 px-1 text-lg text-gray-700">
                                 <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer"
-                                    @click="showEditModal(user)" />
+                                    @click="showEditUserForm(user)" />
                             </td>
                             <td class="py-3 px-1 text-lg text-gray-700 text-left">
 

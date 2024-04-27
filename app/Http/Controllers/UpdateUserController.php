@@ -20,7 +20,7 @@ class UpdateUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(String $id)
+    public function updateUser(String $id)
     {
         // build in function inside framework
         $user = User::findOrFail($id);

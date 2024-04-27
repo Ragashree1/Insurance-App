@@ -24,52 +24,52 @@ class User extends Authenticatable
 
     //testing
 
-    public function __construct($variables = null)
+    public function __construct($userDetails = null)
     {
         parent::__construct();
 
-        if ($variables) {
-            if (isset($variables['username'])) {
-                $this->username = $variables['username'];
+        if ($userDetails) {
+            if (isset($userDetails['username'])) {
+                $this->username = $userDetails['username'];
             }
-            if (isset($variables['first_name'])) {
-                $this->first_name = $variables['first_name'];
+            if (isset($userDetails['first_name'])) {
+                $this->first_name = $userDetails['first_name'];
             }
-            if (isset($variables['last_name'])) {
-                $this->last_name = $variables['last_name'];
+            if (isset($userDetails['last_name'])) {
+                $this->last_name = $userDetails['last_name'];
             }
-            if (isset($variables['email'])) {
-                $this->email = $variables['email'];
+            if (isset($userDetails['email'])) {
+                $this->email = $userDetails['email'];
             }
-            if (isset($variables['contact'])) {
-                $this->contact = $variables['contact'];
+            if (isset($userDetails['contact'])) {
+                $this->contact = $userDetails['contact'];
             }
-            if (isset($variables['password'])) {
-                $this->password = bcrypt($variables['password']);  //store hashed id in database
+            if (isset($userDetails['password'])) {
+                $this->password = bcrypt($userDetails['password']);  //store hashed id in database
             } else {
                 $this->password = bcrypt('password');
             }
-            if (isset($variables['user_profile_id'])) {
-                $this->user_profile_id = $variables['user_profile_id'];
+            if (isset($userDetails['user_profile_id'])) {
+                $this->user_profile_id = $userDetails['user_profile_id'];
             }
-            if (isset($variables['nationality'])) {
-                $this->nationality = $variables['nationality'];
+            if (isset($userDetails['nationality'])) {
+                $this->nationality = $userDetails['nationality'];
             }
-            if (isset($variables['residence_country'])) {
-                $this->residence_country = $variables['residence_country'];
+            if (isset($userDetails['residence_country'])) {
+                $this->residence_country = $userDetails['residence_country'];
             }
-            if (isset($variables['status'])) {
-                $this->status = $variables['status'];
+            if (isset($userDetails['status'])) {
+                $this->status = $userDetails['status'];
             } else {
                 $this->status = 'active';
             }
-            if (isset($variables['dob'])) {
-                $this->dob = $variables['dob'];
+            if (isset($userDetails['dob'])) {
+                $this->dob = $userDetails['dob'];
             }
-            if (isset($variables['profile_photo_path'])) {
-                $this->profile_photo_path = $variables['profile_photo_path'];
+            if (isset($userDetails['profile_photo_path'])) {
+                $this->profile_photo_path = $userDetails['profile_photo_path'];
             }
-            if (isset($variables['created_by'])) {
+            if (isset($userDetails['created_by'])) {
                 $this->created_by = Auth::user()->id;
             }
             if (Request::hasFile('photo')) {
@@ -127,7 +127,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    
+
 
 
     public function userProfile(): BelongsTo
@@ -140,44 +140,44 @@ class User extends Authenticatable
     //     parent::__destruct();
     // }
 
-    public function updateUserAccount($variables)
+    public function updateUserAccount($userDetails)
     {
         try {
-            if (isset($variables['username'])) {
-                $this->username = $variables['username'];
+            if (isset($userDetails['username'])) {
+                $this->username = $userDetails['username'];
             }
-            if (isset($variables['first_name'])) {
-                $this->first_name = $variables['first_name'];
+            if (isset($userDetails['first_name'])) {
+                $this->first_name = $userDetails['first_name'];
             }
-            if (isset($variables['last_name'])) {
-                $this->last_name = $variables['last_name'];
+            if (isset($userDetails['last_name'])) {
+                $this->last_name = $userDetails['last_name'];
             }
-            if (isset($variables['email'])) {
-                $this->email = $variables['email'];
+            if (isset($userDetails['email'])) {
+                $this->email = $userDetails['email'];
             }
-            if (isset($variables['contact'])) {
-                $this->contact = $variables['contact'];
+            if (isset($userDetails['contact'])) {
+                $this->contact = $userDetails['contact'];
             }
-            if (isset($variables['password'])) {
-                $this->password = bcrypt($variables['password']);
+            if (isset($userDetails['password'])) {
+                $this->password = bcrypt($userDetails['password']);
             }
-            if (isset($variables['user_profile_id'])) {
-                $this->user_profile_id = $variables['user_profile_id'];
+            if (isset($userDetails['user_profile_id'])) {
+                $this->user_profile_id = $userDetails['user_profile_id'];
             }
-            if (isset($variables['nationality'])) {
-                $this->nationality = $variables['nationality'];
+            if (isset($userDetails['nationality'])) {
+                $this->nationality = $userDetails['nationality'];
             }
-            if (isset($variables['residence_country'])) {
-                $this->residence_country = $variables['residence_country'];
+            if (isset($userDetails['residence_country'])) {
+                $this->residence_country = $userDetails['residence_country'];
             }
-            if (isset($variables['status'])) {
-                $this->status = $variables['status'];
+            if (isset($userDetails['status'])) {
+                $this->status = $userDetails['status'];
             }
-            if (isset($variables['dob'])) {
-                $this->dob = $variables['dob'];
+            if (isset($userDetails['dob'])) {
+                $this->dob = $userDetails['dob'];
             }
-            if (isset($variables['profile_photo_path'])) {
-                $this->profile_photo_path = $variables['profile_photo_path'];
+            if (isset($userDetails['profile_photo_path'])) {
+                $this->profile_photo_path = $userDetails['profile_photo_path'];
             }
 
             if (Request::hasFile('photo')) {

@@ -46,7 +46,7 @@ Route::middleware([
     // Route::resource('/users', UserController::class);
     Route::post('/users', [CreateUserController::class, 'createUser'])->name('users.store');
     Route::get('/users', [ViewUserController::class, 'viewUsers'])->name('users.index');
-    Route::put('/users/{id}/update', [UpdateUserController::class, 'update'])->name('users.update');
+    Route::put('/users/{id}/update', [UpdateUserController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{id}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
 
     Route::put('users/{id}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
