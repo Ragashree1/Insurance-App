@@ -193,10 +193,10 @@ class User extends Authenticatable
         }
     }
 
-    public static function createUserAccount($variables)
+    public static function createUserAccount($userDetails)
     {
         try {
-            $user = new User($variables);
+            $user = new User($userDetails);
             $user->save();
             return $user;
         } catch (\Exception $e) {
