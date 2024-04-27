@@ -337,13 +337,13 @@ onMounted(() => initFlowbite())
             <template v-if="form.id == ''">
                 <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                     @click="confirmCreateUser">
-                    Submite
+                    Submit
                 </PrimaryButton>
             </template>
             <template v-else>
                 <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
                     @click="confirmUpdateUser">
-                    Submitf
+                    Submit
                 </PrimaryButton>
             </template>
 

@@ -22,7 +22,7 @@ class ViewUserController extends Controller
     public function viewUsers()
     {
         $this->authorize('viewAny', User::class);
-        return Inertia::render('Users/Index', ['users' => User::with('userProfile')->where('user_profile_id', null)->orWhere('user_profile_id', '!=', 1)->get()]);
+        return Inertia::render('Users/Index', ['users' => User::getUsers()]);
     }
 
 }
