@@ -46,11 +46,11 @@ Route::middleware([
     // Route::resource('/users', UserController::class);
     Route::post('/users', [CreateUserController::class, 'store'])->name('users.store');
     Route::get('/users', [ViewUserController::class, 'viewUsers'])->name('users.index');
-    Route::put('/users/{user}/update', [UpdateUserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
+    Route::put('/users/{id}/update', [UpdateUserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
 
-    Route::put('users/{user}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
-    Route::put('users/{user}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
-    Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
+    Route::put('users/{id}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
+    Route::put('users/{id}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
+    Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
     Route::resource('/userProfile', UserProfileController::class);
 });

@@ -20,8 +20,11 @@ class UpdateUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(User $user)
+    public function update(String $id)
     {
+        // build in function inside framework
+        $user = User::findOrFail($id);
+        
         $this->authorize('update', $user);
         $validated = Request::validate([
             'username' => ['required', 'max:50', Rule::unique('users')->ignore($user->id)],

@@ -127,6 +127,8 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    
+
 
     public function userProfile(): BelongsTo
     {
@@ -233,6 +235,12 @@ class User extends Authenticatable
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    //retrieves users other than system admin
+    public static function getUsers()
+    {
+        return User::with('userProfile')->where('user_profile_id', null)->orWhere('user_profile_id', '!=', 1)->get();
     }
 
     public static function deleteUserAccount($user)
