@@ -13,7 +13,6 @@ import TextInput from '@/Components/TextInput.vue';
 import { VueTelInput } from 'vue3-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 import { initFlowbite } from 'flowbite';
-import { DOMDirectiveTransforms } from '@vue/compiler-dom';
 
 const props = defineProps(['users', 'userProfile']);
 const showModal = ref(false);
@@ -92,8 +91,8 @@ function confirmUpdateUser() {
     })
 }
 
-function activateAccount(userId) {
-    router.put(route('users.activate-account', userId),
+function activateAccount(id) {
+    router.put(route('users.activate-account', id),
         {
             onFinish: () => {
                 closeModal();
@@ -101,8 +100,8 @@ function activateAccount(userId) {
         })
 }
 
-function suspendAccount(userId) {
-    router.put(route('users.suspend-account', userId),
+function suspendAccount(id) {
+    router.put(route('users.suspend-account', id),
         {
             onFinish: () => {
                 closeModal();
