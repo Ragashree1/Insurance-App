@@ -13,6 +13,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { VueTelInput } from 'vue3-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 import { initFlowbite } from 'flowbite';
+import { DOMDirectiveTransforms } from '@vue/compiler-dom';
 
 const props = defineProps(['users', 'userProfile']);
 const showModal = ref(false);
@@ -70,26 +71,27 @@ function updateNo(phone, phoneObject, input) {
     }
 }
 
-
-function confirmCreateOrUpdate() {
-    if (form.id == '') {
-        form.post(route('users.store'), {
-            onSuccess: () => {
-                closeModal();
-            }
-        })
-
-    } else {
-        form.put(route('users.update', form.id), {
-            onSuccess: () => {
-                closeModal();
-            },
-            onError: (e) => {
-                alert(e);
-            }
-        })
-    }
+function confirmCreateUser() {
+    console.log('hello');
+    form.post(route('users.store'), {
+        onSuccess: () => {
+            closeModal();
+        }
+    })
 }
+
+function confirmUpdateUser() {
+    console.log('bye idiot');
+    form.put(route('users.update', form.id), {
+        onSuccess: () => {
+            closeModal();
+        },
+        onError: (e) => {
+            alert(e);
+        }
+    })
+}
+
 function activateAccount(userId) {
     router.put(route('users.activate-account', userId),
         {
@@ -181,15 +183,6 @@ onMounted(() => initFlowbite())
                                     <div :id="'user' + id"
                                         class="z-50 ml-10 absolute flex flex-col justify-end hidden py-1 mb-4 space-y-2 bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                                         <ul class="text-sm text-gray-500 dark:text-gray-300">
-                                            <!-- <li>
-                                                <span
-                                                    class="flex items-center px-5 py-2 border-b border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white dark:border-gray-600">
-
-                                                    <span class="text-sm font-medium hover:cursor-pointer"
-                                                        @click="showAssignRoleForm(user)">Assign
-                                                        Role</span>
-                                                </span>
-                                            </li> -->
                                             <li>
                                                 <span
                                                     class="flex items-center px-5 py-2 border-b border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white dark:border-gray-600">
@@ -216,8 +209,8 @@ onMounted(() => initFlowbite())
                                             </li>
                                         </ul>
                                     </div>
-                                    <button type="button" :data-dial-toggle="'user' + id"
-                                        :aria-controls="'user' + id" aria-expanded="false"
+                                    <button type="button" :data-dial-toggle="'user' + id" :aria-controls="'user' + id"
+                                        aria-expanded="false"
                                         class=" right-24 flex items-center justify-center ml-auto hover:text-indigo-500 pr-2">
                                         <Icon icon="carbon:overflow-menu-horizontal" />
                                         <span class="sr-only">Open actions menu</span>
@@ -341,11 +334,19 @@ onMounted(() => initFlowbite())
             <SecondaryButton @click="closeModal">
                 Cancel
             </SecondaryButton>
+            <template v-if="form.id == ''">
+                <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+                    @click="confirmCreateUser">
+                    Submite
+                </PrimaryButton>
+            </template>
+            <template v-else>
+                <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+                    @click="confirmUpdateUser">
+                    Submitf
+                </PrimaryButton>
+            </template>
 
-            <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
-                @click="confirmCreateOrUpdate">
-                Submit
-            </PrimaryButton>
         </template>
 
     </DialogModal>
