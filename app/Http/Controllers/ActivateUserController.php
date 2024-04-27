@@ -22,6 +22,7 @@ class ActivateUserController extends Controller
         $this->authorize('update', $user);
         $user->activateAccount();
 
+        dd('activated');
         $messageType = 'success';
         $message = 'User activated successfully';
 

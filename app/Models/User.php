@@ -45,7 +45,7 @@ class User extends Authenticatable
                 $this->contact = $variables['contact'];
             }
             if (isset($variables['password'])) {
-                $this->password = bcrypt($variables['password']); // Make sure to hash passwords
+                $this->password = bcrypt($variables['password']);  //store hashed id in database
             } else {
                 $this->password = bcrypt('password');
             }
@@ -205,7 +205,7 @@ class User extends Authenticatable
     public function suspendAccount()
     {
         try {
-            $this->user = 'suspended';
+            $this->status = 'suspended';
             $this->save();
             return true;
         } catch (\Exception $e) {
@@ -216,7 +216,7 @@ class User extends Authenticatable
     public function activateAccount()
     {
         try {
-            $this->user = 'activate';
+            $this->status = 'active';
             $this->save();
             return true;
         } catch (\Exception $e) {
