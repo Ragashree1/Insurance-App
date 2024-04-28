@@ -57,13 +57,15 @@ Route::middleware([
     Route::put('users/{id}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
     Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
     Route::resource('/userProfile', UserProfileController::class);
-    // ------------- Listings ------------------------
-
-    Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
-
-    // search a listing
-    Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
-
-    // view single listing
-    Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
+  
 });
+
+ // ------------- Listings ------------------------
+
+ Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
+
+ // search a listing
+ Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
+
+ // view single listing
+ Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
