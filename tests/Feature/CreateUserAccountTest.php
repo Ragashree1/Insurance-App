@@ -15,7 +15,7 @@ class CreateUserAccountTest extends TestCase
     /**
      * A basic feature test example.
      */
-    const PASS = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'; //password
+    const PASS = 'password'; //password
 
     protected function setUp(): void
     {
@@ -37,7 +37,6 @@ class CreateUserAccountTest extends TestCase
             'dob' => Carbon::createFromFormat('Y-m-d', '2010-10-10'),
         ]);
 
-        // dd($response);
         $this->assertDatabaseHas('users', [
             'username' => 'abcde'
         ]);
