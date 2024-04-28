@@ -20,6 +20,8 @@ class UserSeeder extends Seeder
             'email' => 'lucky7@example.com',
             'password' => 'secret',
             'user_profile_id' => 1,
+            'status' => 'active',
+            'created_by' => null
         ]);
         User::factory()->create([
             'username' => 'sam',

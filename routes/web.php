@@ -1,18 +1,20 @@
 <?php
 
-use App\Http\Controllers\ActivateUserController;
-use App\Http\Controllers\CreateUserController;
-use App\Http\Controllers\DeleteUserController;
+use Inertia\Inertia;
+use App\Models\PropertyListing;
 use App\Http\Controllers\searchUserController;
-use App\Http\Controllers\SuspendUserController;
-use App\Http\Controllers\UpdateUserController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserProfileController;
-use App\Http\Controllers\ViewUserController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViewUserController;
+use App\Http\Controllers\CreateUserController;
+use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\UpdateUserController;
+use App\Http\Controllers\SuspendUserController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\ActivateUserController;
+use App\Http\Controllers\PropertyListingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +57,13 @@ Route::middleware([
     Route::put('users/{id}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
     Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
     Route::resource('/userProfile', UserProfileController::class);
+    // ------------- Listings ------------------------
+
+    Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
+
+    // search a listing
+    Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
+
+    // view single listing
+    Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
 });

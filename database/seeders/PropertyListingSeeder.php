@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\PropertyListing;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PropertyListingSeeder extends Seeder
 {
@@ -12,6 +13,9 @@ class PropertyListingSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        PropertyListing::factory()->times(5)->create([
+            'create_by' => 2,
+            'status' => 'new'
+        ]);
     }
 }
