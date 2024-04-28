@@ -25,7 +25,7 @@ class BuyerLoginTest extends TestCase
 
     public function test_buyer_can_log_in(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS]);
+        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS, 'status' =>'active']);
 
         $response = $this->post('/login', [
             'email' => $user->email,
@@ -40,7 +40,7 @@ class BuyerLoginTest extends TestCase
 
     public function test_buyer_cannot_login_with_incorrect_credentials(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS]);
+        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS, 'status' =>'active']);
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
@@ -53,7 +53,7 @@ class BuyerLoginTest extends TestCase
 
     public function test_buyer_cannot_login_without_password(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS]);
+        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS, 'status' =>'active']);
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
