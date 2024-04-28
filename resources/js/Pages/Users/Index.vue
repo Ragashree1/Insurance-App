@@ -9,16 +9,19 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+// import StatusMessage from '@/Components/StatusMessage.vue'
 import TextInput from '@/Components/TextInput.vue';
 import { VueTelInput } from 'vue3-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 import { initFlowbite } from 'flowbite';
 import { debounce } from 'lodash';
+import StatusMessage from '../../Components/StatusMessage.vue';
 
 const props = defineProps(['users', 'search']);
 const showModal = ref(false);
 const showAssignRoleModal = ref(false);
 const search = ref(props.search);
+const show = ref(true);
 
 const searchUser = debounce(() => {
     router.get(route('search-users', search.value));
@@ -41,6 +44,10 @@ const form = useForm({
     photo: null,
     processing: false,
 })
+
+const hideMessage = () => {
+    show.value = false;
+}
 
 function showEditUserForm(user) {
     form.id = user.id;
@@ -86,7 +93,6 @@ function confirmCreateUser() {
 }
 
 function confirmUpdateUser() {
-    console.log('bye idiot');
     form.put(route('users.update', form.id), {
         onSuccess: () => {
             closeModal();
@@ -147,6 +153,7 @@ onMounted(() => {
             </h2>
 
         </template>
+        <StatusMessage :show="show" @click="hideMessage"></StatusMessage>
         <div class=" p-7 h-screen w-screen">
             <div class="flex justify-around">
                 <table class="z-10 ">
@@ -233,13 +240,14 @@ onMounted(() => {
                                                     class="flex items-center px-5 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white">
 
                                                     <span class="text-sm font-medium text-red-500 hover:cursor-pointer"
-                                                        @click="deleteUser(user.id)">Delete User</span>
+                                                        @click="deleteUser(user.id)">Delete
+                                                        User</span>
                                                 </span>
                                             </li>
                                         </ul>
                                     </div>
-                                    <button type="button" :data-dial-toggle="'user' + id" data-dial-trigger="click" :aria-controls="'user' + id"
-                                        aria-expanded="false"
+                                    <button type="button" :data-dial-toggle="'user' + id" data-dial-trigger="click"
+                                        :aria-controls="'user' + id" aria-expanded="false"
                                         class=" right-20 flex items-center justify-center ml-auto hover:text-indigo-500 pr-2">
                                         <Icon icon="carbon:overflow-menu-horizontal" />
                                         <span class="sr-only">Open actions menu</span>
