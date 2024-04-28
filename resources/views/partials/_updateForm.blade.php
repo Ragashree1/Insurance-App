@@ -1,5 +1,6 @@
-<form action="/listings/manage/create/2" method="POST" enctype="multipart/form-data">
+<form action="/listings/manage/update/{{$listing['id']}}" method="POST" enctype="multipart/form-data">
     @csrf   <!-- prevent cross site scripting -->
+    @method('PUT')
         <div class="mb-6">
             <label
                 for="title"
@@ -10,7 +11,7 @@
                 type="text"
                 class="border border-gray-200 rounded p-2 w-full"
                 name="title"
-                value = "{{old("title")}}"
+                value="{{$listing['title']}}"
             />
             
             @error('title')
@@ -27,7 +28,7 @@
                 class="border border-gray-200 rounded p-2 w-full"
                 name="type"
                 placeholder="Example: Condo, HDB..."
-                value = "{{old("type")}}"
+                value="{{$listing['type']}}"
             />
             @error('type')
                 <p class="text-red-500 text-sm mt-1"> {{$message}}</p>
@@ -42,7 +43,7 @@
                 type="number"
                 class="border border-gray-200 rounded p-2 w-full"
                 name="num_bedroom"
-                value = "{{old("num_bedroom")}}"
+                value="{{$listing['num_bedroom']}}"
             />
             @error('num_bedroom')
                 <p class="text-red-500 text-sm mt-1"> {{$message}}</p>
@@ -57,7 +58,7 @@
                 type="number"
                 class="border border-gray-200 rounded p-2 w-full"
                 name="num_bathroom"
-                value = "{{old("num_bathroom")}}"
+                value="{{$listing['num_bathroom']}}"
             />
             @error('num_bathroom')
                 <p class="text-red-500 text-sm mt-1"> {{$message}}</p>
@@ -66,7 +67,12 @@
 
         <div class="mb-6">
             <label for="area" class="inline-block text-sm mb-2">Area (in square feet)</label>
-            <input type="number" class="border border-gray-200 rounded p-2 w-full" name="area" placeholder="Example: 1500" value="{{ old('area') }}">
+            <input type="number" 
+                class="border border-gray-200 rounded p-2 w-full" 
+                name="area" 
+                placeholder="Example: 1500"
+                value="{{$listing['area']}}"
+            >
             @error('area')
                 <p class="text-red-500 text-sm mt-1"> {{ $message }}</p>
             @enderror
@@ -74,7 +80,11 @@
         
         <div class="mb-6">
             <label for="sale_price" class="inline-block text-sm mb-2">Sale Price ($)</label>
-            <input type="number" class="border border-gray-200 rounded p-2 w-full" name="sale_price" placeholder="Example: 250000" value="{{ old('sale_price') }}">
+            <input type="number" class="border border-gray-200 rounded p-2 w-full" 
+                name="sale_price" 
+                placeholder="Example: 250000" 
+                value="{{$listing['sale_price']}}"
+            >
             @error('sale_price')
                 <p class="text-red-500 text-sm mt-1"> {{ $message }}</p>
             @enderror
@@ -84,8 +94,8 @@
             <label for="status" class="inline-block text-sm mb-2">Status</label>
             <select name="status" id="status" class="border border-gray-200 rounded p-2 w-full">
                 <option value="" disabled selected>Select status</option>
-                <option value="new" @if(old('status') == 'new') selected @endif>New</option>
-                <option value="sold" @if(old('status') == 'sold') selected @endif>Sold</option>
+                <option value="new" @if($listing['status'] == 'new') selected @endif>New</option>
+                <option value="sold" @if($listing['status'] == 'sold') selected @endif>Sold</option>
             </select>
             @error('status')
                 <p class="text-red-500 text-sm mt-1"> {{ $message }}</p>
@@ -101,7 +111,7 @@
             <input type="text" class="border border-gray-200 rounded p-2 w-full" 
                 name="seller_id" 
                 placeholder="Example: 123456" 
-                value="{{ old('seller_id') }}"
+                value="{{$listing['seller_id']}}"
             >
             @error('seller_id')
                 <p class="text-red-500 text-sm mt-1"> {{ $message }}</p>
@@ -119,7 +129,7 @@
                 class="border border-gray-200 rounded p-2 w-full"
                 name="location"
                 placeholder="Example: Remote, Boston MA, etc"
-                value = "{{old("location")}}"
+                value = "{{$listing['location']}}"
             />
             @error('location')
                 <p class="text-red-500 text-sm mt-1"> {{$message}}</p>
@@ -134,8 +144,16 @@
                 type="file"
                 class="border border-gray-200 rounded p-2 w-full"
                 name="image"
-                value = "{{old("image")}}"
             />
+
+            <img
+                class="w-48 mr-6 mb-6"
+                src="{{$listing['image'] ? asset('storage/' . $listing['image']) : 
+                        asset('images/no-image.png') }}"
+                alt=""
+                style="width: 150px; height: 100px;"
+            />
+
             @error('image')
                 <p class="text-red-500 text-sm mt-1"> {{$message}}</p>
             @enderror
@@ -153,7 +171,7 @@
                 name="description"
                 rows="5"
                 placeholder="Include tasks, requirements, salary, etc"
-            >{{old("description")}}</textarea>
+            >{{$listing['description']}}</textarea>
             @error('description')
                 <p class="text-red-500 text-sm mt-1"> {{$message}}</p>
             @enderror
@@ -163,11 +181,11 @@
             <button
                 class="bg-laravel text-white rounded py-2 px-4 hover:bg-black"
             >
-                Create Listing
+                Update Listing
             </button>
 
-            <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-md" onclick="closeCreateModal()">
-                Cancel
-            </button>            
+            <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-md" onclick="window.history.back()">
+                Close
+            </button>
         </div>
     </form>

@@ -11,10 +11,13 @@
     </form>
 
     <!-- Button to trigger modal -->
-    <button id="createButton" onclick="openModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mb-4">Create Listing</button>
+    <button id="createButton" onclick="openCreateModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md mb-4">
+        <i class="fa-solid fa fa-plus"></i>
+        Create Listing
+    </button>
 
-    <!-- Modal -->
-    <div id="modal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden overflow-y-auto">
+    <!-- Create Modal -->
+    <div id="createModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden overflow-y-auto">
         <div class="bg-white p-8 rounded-lg max-h-full overflow-y-auto" style="width: 50vw;">
             <!-- Modal content -->
             <h2 class="text-2xl font-bold mb-4">Create Listing</h2>
@@ -23,7 +26,6 @@
             
         </div>
     </div>
-
     
     <table class="w-full table-auto rounded-sm border border-gray-300">
         <thead>
@@ -58,17 +60,27 @@
                 <td class="px-2 py-2 border border-gray-300">{{ $listing['seller_id'] }}</td>
                 <td class="px-4 py-2 border border-gray-300 text-center">
                     <!-- view -->
-                    <a href="/listings/{{ $listing['id'] }}" class="inline-block bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full">View</a>
+                    <a href="/listings/{{ $listing['id'] }}" class="inline-block bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full">
+                        <i class="fa-solid fa-eye"></i>
+                        View
+                    </a>
                     
                     <!-- update -->
-                    <a href="/listings/{{ $listing['id'] }}/edit" class="inline-block bg-blue-200 hover:bg-blue-300 px-4 py-2 rounded-full">Edit</a>
+                    <a href="/listings/manage/update/{{$listing['id']}}" class="inline-block bg-blue-200 hover:bg-blue-300 px-4 py-2 rounded-full">
+                        <i class="fa-solid fa-pen"></i>
+                        Update
+                    </a>
                     
                     <!-- delete -->
-                    <form action="/listings/{{ $listing['id'] }}" method="POST" class="inline">
+                    <form action="/listings/manage/delete/{{$listing['id']}}" method="POST" class="inline" 
+                            onsubmit="return confirm('Confirm delete?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="inline-block bg-red-200 hover:bg-red-300 px-4 py-2 rounded-full">Delete</button>
-                    </form>
+                        <button type="submit" class="inline-block bg-red-200 hover:bg-red-300 px-4 py-2 rounded-full">
+                            <i class="fa-solid fa-trash"></i>
+                            Delete
+                        </button>
+                    </form>                    
                 </td>
             </tr>
             @endforeach
@@ -85,17 +97,17 @@
 <script>
     @if ($errors->any())
         // Open the modal if there are validation errors
-        openModal();
+        openCreateModal();
     @endif
 
     // Function to open the modal
-    function openModal() {
-        document.getElementById('modal').classList.remove('hidden');
+    function openCreateModal() {
+        document.getElementById('createModal').classList.remove('hidden');
     }
 
     // Function to close the modal
-    function closeModal() {
-        document.getElementById('modal').classList.add('hidden');
+    function closeCreateModal() {
+        document.getElementById('createModal').classList.add('hidden');
     }
 </script>
 

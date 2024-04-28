@@ -38,7 +38,7 @@ class PropertyListing extends Model
     }
     
     // display one listing
-    public static function viewListing(int $listing_id): array
+    public static function findListing(int $listing_id): array
     {
         // Find the listing with the given ID
         $listing = self::where('id', $listing_id)->first();
@@ -104,7 +104,7 @@ class PropertyListing extends Model
     }
     
 
-    public static function validateFormField(Request $request): array
+    public static function validateCreateForm(Request $request): array
     {
         $formFields = $request->validate([
             'title' => 'required',
@@ -130,6 +130,29 @@ class PropertyListing extends Model
         return $formFields;
     }
 
+    public static function validateUpdateForm(Request $request): array
+    {
+        $formFields = $request->validate([
+            'title' => 'required',
+            'type' => 'required',
+            'num_bedroom' => 'required|numeric|min:0',
+            'num_bathroom' => 'required|numeric|min:0',
+            'area' => 'required|numeric|gt:0',
+            'sale_price' => 'required|numeric|gt:0',
+            'status' => 'required',
+            'location' => 'required',
+            'description' => 'required',
+            'seller_id' => [
+                'required',
+                Rule::exists('users', 'id')->where(function ($query) {
+                    $query->where('user_profile_id', 3);
+                }),
+            ],
+        ]);
+
+        return $formFields;
+    }
+
     public static function createListing(array $formData, int $user_id): bool
     {
         try {
@@ -141,5 +164,35 @@ class PropertyListing extends Model
             return false; 
         }
     }
+
+    // updating a listing
+    public static function updateListing(array $formData, int $listing_id): bool
+    {
+        // Find the listing with the given ID
+        $listing = self::where('id', $listing_id)->first();
+
+        try {
+            // create the form
+            $listing->update($formData);
+            return true; 
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false; 
+        }
+    }
+
+    public static function deleteListing(int $listing_id): bool
+    {
+        $listing = self::where('id', $listing_id)->first();
+
+        try {
+            $listing->delete();
+            return true;
+            
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     
 }

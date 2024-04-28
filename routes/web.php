@@ -15,6 +15,7 @@ use App\Http\Controllers\SuspendUserController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ActivateUserController;
 use App\Http\Controllers\PropertyListingController;
+use PhpParser\Builder\Property;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +76,15 @@ Route::post('/listings/manage/create/{user_id}', [PropertyListingController::cla
 
 // agent search listings 
 Route::get('listings/manage/search/{user_id}', [PropertyListingController::class, 'agentSearchListings'])->name('agentSearchListings');
+
+// update selected listing
+Route::put('listings/manage/update/{listing_id}', [PropertyListingController::class, 'updateListing'])->name('updateListing');
+
+// agent choose the listing to update
+Route::get('listings/manage/update/{listing_id}', [PropertyListingController::class, 'listingToUpdate'])->name('listingToUpdate');
+
+// delete listing
+Route::delete('listings/manage/delete/{listing_id}', [PropertyListingController::class, 'deleteListing'])->name('deleteListing');
 
 // agent manage listings page - display all listings created by that agent  
 Route::get('listings/manage/{user_id}', [PropertyListingController::class, 'viewListingsCreatedByAgent']);

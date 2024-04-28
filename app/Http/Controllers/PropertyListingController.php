@@ -30,7 +30,7 @@ class PropertyListingController extends Controller
     public function viewListing(int $listing_id)
     {
         // call methods in entity to get array
-        $listing = PropertyListing::viewListing($listing_id);
+        $listing = PropertyListing::findListing($listing_id);
 
         if($listing)
         {
@@ -61,9 +61,7 @@ class PropertyListingController extends Controller
     {
         $listings = PropertyListing::viewListingsCreatedByAgent($user_id);
 
-        return view('listings.manage', [
-            'listings' => $listings
-        ]);
+        return view('listings.manage', ['listings' => $listings]);
     }
 
     //agent search a listing
@@ -79,48 +77,76 @@ class PropertyListingController extends Controller
         return view('listings.manage', ['listings' => $listings]);    
     }
 
+    // agent create a listing
     public function createListing(Request $request, int $user_id)
     {
-        $formFields = PropertyListing::validateFormField($request);
+        $formFields = PropertyListing::validateCreateForm($request);
 
         $formFields['create_by'] = $user_id;
 
         // Store the image file in the 'image' directory under the 'public' disk
         $formFields['image'] = PropertyListing::storeImage($request);
 
-        PropertyListing::createListing($formFields, $user_id);
-        return redirect('/listings/manage/' . $user_id);
+        $success = PropertyListing::createListing($formFields, $user_id);
+
+        if($success)
+        {
+            return redirect('/listings/manage/' . $user_id);
+        }
+        else
+        {
+            abort('404'); 
+        }
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorePropertyListingRequest $request)
+    // get the listing object that agent chose to update
+    public function listingToUpdate(int $listing_id)
     {
-        //
+        // call methods in entity to get array
+        $listing = PropertyListing::findListing($listing_id);
+
+        if($listing)
+        {
+            return view('listings.updateListing', ['listing' => $listing]);
+        }
+        else
+        {
+            abort('404');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PropertyListing $propertyListing)
+    // update the selected listing
+    public function updateListing(Request $request, int $listing_id)
     {
-        //
+        $formFields = PropertyListing::validateUpdateForm($request);
+
+        // Store the image file in the 'image' directory under the 'public' disk
+        $formFields['image'] = PropertyListing::storeImage($request);
+
+        $success = PropertyListing::updateListing($formFields, $listing_id);
+
+        if($success)
+        {
+            return redirect('/listings/manage/' . 2);
+        }
+        else
+        {
+            abort('404'); 
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePropertyListingRequest $request, PropertyListing $propertyListing)
+    public function deleteListing(int $listing_id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PropertyListing $propertyListing)
-    {
-        //
+        $success = PropertyListing::deleteListing($listing_id);
+        
+        if($success)
+        {
+            return redirect('/listings/manage/' . 2);
+        }
+        else
+        {
+            abort('404'); 
+        }
     }
 }
