@@ -53,7 +53,7 @@ class PropertyListing extends Model
 
 
     // search listings 
-    public function scopeSearchListings($query, ?string $searchTerm, ?float $minPrice, ?float $maxPrice, ?int $user_id): array
+    public function scopeSearchListings($query, ?string $searchTerm, ?float $minPrice, ?float $maxPrice, ?int $user_id = null): array
     {
         if ($searchTerm) {
             $query->where(function ($query) use ($searchTerm) {
@@ -61,8 +61,7 @@ class PropertyListing extends Model
                     ->orWhere('type', 'like', '%' . $searchTerm . '%')
                     ->orWhere('location', 'like', '%' . $searchTerm . '%')
                     ->orWhere('description', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('status', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('id', 'like', '%' . $searchTerm . '%');
+                    ->orWhere('status', 'like', '%' . $searchTerm . '%');
             });
         }
 
