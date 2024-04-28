@@ -37,7 +37,7 @@ class PropertyListing extends Model
     // display one listing
     public static function viewListing(int $id): array
     {
-        $listings = self::all();
+        $listings = self::allListings();
 
         foreach($listings as $listing)
         {

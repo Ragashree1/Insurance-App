@@ -23,7 +23,7 @@ class SystemAdminLoginTest extends TestCase
 
     public function test_system_admin_can_log_in(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password']);
+        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password', 'status' =>'active']);
 
         $response = $this->post('/login', [
             'email' => $user->email,
@@ -38,7 +38,7 @@ class SystemAdminLoginTest extends TestCase
 
     public function test_system_admin_cannot_login_with_incorrect_credentials(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password']);
+        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password', 'status' =>'active']);
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
@@ -51,7 +51,7 @@ class SystemAdminLoginTest extends TestCase
 
     public function test_system_admin_cannot_login_without_password(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password']);
+        $user = User::factory()->create(['user_profile_id' => '1', 'password' => 'password', 'status' =>'active']);
 
         $response = $this->followingRedirects()->post('/login', [
             'email' => $user->email,
