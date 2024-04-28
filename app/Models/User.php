@@ -99,7 +99,7 @@ class User extends Authenticatable
         'status',
         'nationality',
         'residence_country',
-        'create_by',
+        'created_by',
         'user_profile_id',
     ];
 
