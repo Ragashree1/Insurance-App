@@ -71,7 +71,7 @@ class User extends Authenticatable
             }
 
             if (isset($userDetails['created_by'])) {
-                $this->created_by = Auth::user() ? Auth::user()->id : 0;
+                $this->created_by = Auth::user() ? Auth::user()->id : null;
             }
             
             if (Request::hasFile('photo')) {
