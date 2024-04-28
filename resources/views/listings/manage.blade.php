@@ -15,7 +15,7 @@
 
     <!-- Modal -->
     <div id="modal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center z-50 hidden overflow-y-auto">
-        <div class="bg-white p-8 rounded-lg max-h-full overflow-y-auto">
+        <div class="bg-white p-8 rounded-lg max-h-full overflow-y-auto" style="width: 50vw;">
             <!-- Modal content -->
             <h2 class="text-2xl font-bold mb-4">Create Listing</h2>
 

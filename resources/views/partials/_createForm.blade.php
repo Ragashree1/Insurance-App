@@ -166,6 +166,8 @@
                 Create Listing
             </button>
 
-            <a href="/listings/manage/2" class="text-black ml-4"> Back </a>
+            <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-md" onclick="closeModal()">
+                Close
+            </button>            
         </div>
     </form>
