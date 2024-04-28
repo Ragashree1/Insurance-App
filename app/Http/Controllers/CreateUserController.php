@@ -20,7 +20,7 @@ class CreateUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
+    public function createUser()
     {
 
         $this->authorize('create', User::class);
@@ -46,7 +46,7 @@ class CreateUserController extends Controller
 
         $response = User::createUserAccount($validated);
 
-        if ($response) {
+        if ($response != null) {
             $messageType = 'success';
             $message =  'User created successfully';
         }

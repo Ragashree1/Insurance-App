@@ -2,6 +2,7 @@
 
 use Inertia\Inertia;
 use App\Models\PropertyListing;
+use App\Http\Controllers\searchUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -46,25 +47,23 @@ Route::middleware([
         return Inertia::render('Dashboard', ['profile' => Auth::user()->userProfile()->first()]);
     })->name('dashboard');
     // Route::resource('/users', UserController::class);
-    Route::post('/users', [CreateUserController::class, 'store'])->name('users.store');
+    Route::post('/users', [CreateUserController::class, 'createUser'])->name('users.store');
     Route::get('/users', [ViewUserController::class, 'viewUsers'])->name('users.index');
-    Route::put('/users/{user}/update', [UpdateUserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
+    Route::put('/users/{id}/update', [UpdateUserController::class, 'updateUser'])->name('users.update');
+    Route::delete('/users/{id}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
 
-    Route::put('users/{user}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
-    Route::put('users/{user}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
-    Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
+    Route::get('users/{name}', [SearchUserController::class, 'searchUser'])->name('search-users');
+    Route::put('users/{id}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
+    Route::put('users/{id}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
+    Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
     Route::resource('/userProfile', UserProfileController::class);
+    // ------------- Listings ------------------------
+
+    Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
+
+    // search a listing
+    Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
+
+    // view single listing
+    Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
 });
-
-// ------------- Listings ------------------------
-
-Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
-
-// search a listing
-Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
-
-// view single listing
-Route::get('/listings/{id}', [PropertyListingController::class, 'viewListing']);
-
-
