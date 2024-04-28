@@ -2,21 +2,30 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import DialogModal from '@/Components/DialogModal.vue';
 import { Icon } from '@iconify/vue';
-import { ref, reactive, nextTick, onMounted } from 'vue';
+import { ref, reactive, nextTick, onMounted, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+// import StatusMessage from '@/Components/StatusMessage.vue'
 import TextInput from '@/Components/TextInput.vue';
 import { VueTelInput } from 'vue3-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 import { initFlowbite } from 'flowbite';
+import { debounce } from 'lodash';
+import StatusMessage from '../../Components/StatusMessage.vue';
 
-const props = defineProps(['users', 'userProfile']);
+const props = defineProps(['users', 'search']);
 const showModal = ref(false);
 const showAssignRoleModal = ref(false);
+const search = ref(props.search);
+const show = ref(true);
+
+const searchUser = debounce(() => {
+    router.get(route('search-users', search.value));
+}, 500)
 
 const form = useForm({
     id: '',
@@ -36,7 +45,11 @@ const form = useForm({
     processing: false,
 })
 
-function showEditModal(user) {
+const hideMessage = () => {
+    show.value = false;
+}
+
+function showEditUserForm(user) {
     form.id = user.id;
     form.username = user.username;
     form.first_name = user.first_name;
@@ -70,28 +83,28 @@ function updateNo(phone, phoneObject, input) {
     }
 }
 
-
-function confirmCreateOrUpdate() {
-    if (form.id == '') {
-        form.post(route('users.store'), {
-            onSuccess: () => {
-                closeModal();
-            }
-        })
-
-    } else {
-        form.put(route('users.update', form.id), {
-            onSuccess: () => {
-                closeModal();
-            },
-            onError: (e) => {
-                alert(e);
-            }
-        })
-    }
+function confirmCreateUser() {
+    console.log('hello');
+    form.post(route('users.store'), {
+        onSuccess: () => {
+            closeModal();
+        }
+    })
 }
-function activateAccount(userId) {
-    router.put(route('users.activate-account', userId),
+
+function confirmUpdateUser() {
+    form.put(route('users.update', form.id), {
+        onSuccess: () => {
+            closeModal();
+        },
+        onError: (e) => {
+            alert(e);
+        }
+    })
+}
+
+function activateAccount(id) {
+    router.put(route('users.activate-account', id),
         {
             onFinish: () => {
                 closeModal();
@@ -99,8 +112,8 @@ function activateAccount(userId) {
         })
 }
 
-function suspendAccount(userId) {
-    router.put(route('users.suspend-account', userId),
+function suspendAccount(id) {
+    router.put(route('users.suspend-account', id),
         {
             onFinish: () => {
                 closeModal();
@@ -126,7 +139,9 @@ function deleteUser($user) {
     router.delete(route('users.destroy', $user));
 }
 
-onMounted(() => initFlowbite())
+onMounted(() => {
+    initFlowbite();
+})
 
 </script>
 
@@ -138,12 +153,35 @@ onMounted(() => initFlowbite())
             </h2>
 
         </template>
-        <div class="p-7 h-screen">
+        <StatusMessage :show="show" @click="hideMessage"></StatusMessage>
+        <div class=" p-7 h-screen w-screen">
             <div class="flex justify-around">
-                <table class="w-2/3 z-10">
+                <table class="z-10 ">
                     <thead class="border-b-2 border-gray-200">
                         <tr>
-                            <td colspan="7" class="text-right pb-6">
+                            <td colspan="2" class="text-left pb-6">
+                                <!-- https://flowbite.com/docs/forms/search-input/#search-bar-example -->
+
+                                <form class="max-w-md mx-auto">
+                                    <label for="default-search"
+                                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2"
+                                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                            </svg>
+                                        </div>
+                                        <input type="search" id="default-search" v-model="search" @input="searchUser"
+                                            class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="Search" />
+                                    </div>
+                                </form>
+                            </td>
+                            <td colspan="5" class="text-right pb-6">
                                 <PrimaryButton @click="showCreateUserForm">
                                     Create
                                 </PrimaryButton>
@@ -171,7 +209,7 @@ onMounted(() => initFlowbite())
 
                             <td class="py-3 px-1 text-lg text-gray-700">
                                 <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer"
-                                    @click="showEditModal(user)" />
+                                    @click="showEditUserForm(user)" />
                             </td>
                             <td class="py-3 px-1 text-lg text-gray-700 text-left">
 
@@ -181,15 +219,6 @@ onMounted(() => initFlowbite())
                                     <div :id="'user' + id"
                                         class="z-50 ml-10 absolute flex flex-col justify-end hidden py-1 mb-4 space-y-2 bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                                         <ul class="text-sm text-gray-500 dark:text-gray-300">
-                                            <!-- <li>
-                                                <span
-                                                    class="flex items-center px-5 py-2 border-b border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white dark:border-gray-600">
-
-                                                    <span class="text-sm font-medium hover:cursor-pointer"
-                                                        @click="showAssignRoleForm(user)">Assign
-                                                        Role</span>
-                                                </span>
-                                            </li> -->
                                             <li>
                                                 <span
                                                     class="flex items-center px-5 py-2 border-b border-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white dark:border-gray-600">
@@ -211,14 +240,15 @@ onMounted(() => initFlowbite())
                                                     class="flex items-center px-5 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white">
 
                                                     <span class="text-sm font-medium text-red-500 hover:cursor-pointer"
-                                                        @click="deleteUser(user.id)">Delete User</span>
+                                                        @click="deleteUser(user.id)">Delete
+                                                        User</span>
                                                 </span>
                                             </li>
                                         </ul>
                                     </div>
-                                    <button type="button" :data-dial-toggle="'user' + id"
+                                    <button type="button" :data-dial-toggle="'user' + id" data-dial-trigger="click"
                                         :aria-controls="'user' + id" aria-expanded="false"
-                                        class=" right-24 flex items-center justify-center ml-auto hover:text-indigo-500 pr-2">
+                                        class=" right-20 flex items-center justify-center ml-auto hover:text-indigo-500 pr-2">
                                         <Icon icon="carbon:overflow-menu-horizontal" />
                                         <span class="sr-only">Open actions menu</span>
                                     </button>
@@ -341,11 +371,19 @@ onMounted(() => initFlowbite())
             <SecondaryButton @click="closeModal">
                 Cancel
             </SecondaryButton>
+            <template v-if="form.id == ''">
+                <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+                    @click="confirmCreateUser">
+                    Submit
+                </PrimaryButton>
+            </template>
+            <template v-else>
+                <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+                    @click="confirmUpdateUser">
+                    Submit
+                </PrimaryButton>
+            </template>
 
-            <PrimaryButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
-                @click="confirmCreateOrUpdate">
-                Submit
-            </PrimaryButton>
         </template>
 
     </DialogModal>

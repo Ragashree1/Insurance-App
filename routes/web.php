@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivateUserController;
 use App\Http\Controllers\CreateUserController;
 use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\searchUserController;
 use App\Http\Controllers\SuspendUserController;
 use App\Http\Controllers\UpdateUserController;
 use App\Http\Controllers\UserController;
@@ -44,13 +45,14 @@ Route::middleware([
         return Inertia::render('Dashboard', ['profile' => Auth::user()->userProfile()->first()]);
     })->name('dashboard');
     // Route::resource('/users', UserController::class);
-    Route::post('/users', [CreateUserController::class, 'store'])->name('users.store');
+    Route::post('/users', [CreateUserController::class, 'createUser'])->name('users.store');
     Route::get('/users', [ViewUserController::class, 'viewUsers'])->name('users.index');
-    Route::put('/users/{user}/update', [UpdateUserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{user}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
+    Route::put('/users/{id}/update', [UpdateUserController::class, 'updateUser'])->name('users.update');
+    Route::delete('/users/{id}/destroy', [DeleteUserController::class, 'destroy'])->name('users.destroy');
 
-    Route::put('users/{user}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
-    Route::put('users/{user}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
-    Route::put('users/{user}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
+    Route::get('users/{name}', [SearchUserController::class, 'searchUser'])->name('search-users');
+    Route::put('users/{id}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
+    Route::put('users/{id}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
+    Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
     Route::resource('/userProfile', UserProfileController::class);
 });

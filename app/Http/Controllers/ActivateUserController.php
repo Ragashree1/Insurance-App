@@ -17,12 +17,13 @@ use Inertia\Inertia;
 class ActivateUserController extends Controller
 {
 
-    public function activateAccount(User $user)
+    public function activateAccount(String $id)
     {
+        // build in function inside framework
+        $user = User::findOrFail($id);
         $this->authorize('update', $user);
         $user->activateAccount();
 
-        dd('activated');
         $messageType = 'success';
         $message = 'User activated successfully';
 
