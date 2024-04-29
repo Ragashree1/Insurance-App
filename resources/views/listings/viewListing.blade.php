@@ -7,7 +7,8 @@
 
 <div class="mx-4">
     <div class="bg-gray-50 border border-gray-200 p-10 rounded-lg flex flex-col md:flex-row items-center justify-center md:justify-start">
-        <img class="w-full md:w-80 mr-7 mb-6 md:mb-0" src="{{asset('images/no-image.png')}}" alt="Listing Image">
+        <img class="w-full md:w-80 mr-7 mb-6 md:mb-0" src="{{$listing['image'] ? asset('storage/' . $listing['image']) : 
+        asset('images/no-image.png') }}" alt="Listing Image">
 
 
         <div class="flex flex-col items-center md:items-start text-center md:text-left">
