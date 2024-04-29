@@ -25,7 +25,7 @@ class RealEstateAgentLoginTest extends TestCase
 
     public function test_real_estate_agent_can_log_in(): void
     {
-        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS]);
+        $user = User::factory()->create(['user_profile_id' => '4', 'password' => self::PASS, 'status' =>'active']);
 
         $response = $this->post('/login', [
             'email' => $user->email,

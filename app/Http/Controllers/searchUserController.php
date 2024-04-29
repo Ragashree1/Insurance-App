@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class SearchUserController extends Controller
+class searchUserController extends Controller
 {
     //
     public function searchUser(String $name)
