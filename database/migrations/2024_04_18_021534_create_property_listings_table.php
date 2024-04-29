@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->integer('num_bedroom');
             $table->integer('num_bathroom');
-            $table->decimal('area', 8, 2); 
-            $table->decimal('sale_price', 10, 2); 
+            $table->integer('area');
+            $table->integer('sale_price');
             $table->string("location")->unique();
             $table->text("description");
             $table->foreignId('create_by')->constrained('users')->onDelete('cascade');

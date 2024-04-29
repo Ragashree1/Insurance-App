@@ -1,7 +1,11 @@
 @extends('layout')
 @section('content')
 @include('partials._hero')
-@include('partials._search')
+
+<form action="{{ route('searchListings') }}" method="GET">
+    @include('partials._search')
+</form>
+
 
 <div class="lg:grid lg:grid-cols-2 gap-4 space-y-4 md:space-y-0 mx-4">
 
@@ -10,7 +14,8 @@
     
     <div class="relative bg-gray-50 border border-gray-200 rounded p-6">
         <div class="flex">
-            <img class="hidden w-48 mr-6 md:block" src="{{asset('images/no-image.png')}}" alt="" />
+            <img class="hidden w-48 mr-6 md:block" src="{{$listing['image'] ? asset('storage/' . $listing['image']) : 
+            asset('images/no-image.png') }}" alt="" />
             <div>
                 <h3 class="text-2xl">
                     <a href="/listings/{{$listing['id']}}" style="text-decoration: underline;">
