@@ -19,7 +19,6 @@ class UserProfileController extends Controller
     {
         // Fetch all user profiles with their associated user profiles
         $userProfiles = UserProfile::all();
-        // dd($userProfiles);
         return Inertia::render('UserProfile/Index', ['userProfile' => $userProfiles]);
     }
 
@@ -37,14 +36,14 @@ class UserProfileController extends Controller
         ]);
         
         $messageType = 'error';
-        $message =  'User not created';
+        $message =  'User Profile not created';
 
         if (UserProfile::create($validated)) {
             $messageType = 'success';
             $message =  'User Profile created successfully';
         }
 
-        return Redirect::back()->with('success', 'User Profile created.');
+        return Redirect::back()->with($messageType, $message);
     }
 
     /**

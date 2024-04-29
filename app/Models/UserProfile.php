@@ -14,6 +14,23 @@ class UserProfile extends Model
     const CREATED_AT = 'create_date';
     const UPDATED_AT = null; 
 
+    public function __construct($profileDetails = null)
+    {
+        parent::__construct();
+
+        if ($profileDetails) {
+            if (isset($profileDetails['name'])) {
+                $this->name = $profileDetails['name'];
+            }
+            if (isset($profileDetails['description'])) {
+                $this->description = $profileDetails['description'];
+            }
+            if (isset($profileDetails['status'])) {
+                $this->status = $profileDetails['status'];
+            }
+        }
+    }
+
      /**
      * The attributes that are mass assignable.
      *
@@ -51,4 +68,41 @@ class UserProfile extends Model
     protected $appends = [
         //  
     ];
+
+    public static function createUserProfile($profileDetails)
+    {
+        try {
+            $profile = new UserProfile($profileDetails);
+            $profile->save();
+            return $profile;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function updateProfile($profileDetails)
+    {
+        try {
+            if ($profileDetails) {
+                if (isset($profileDetails['name'])) {
+                    $this->name = $profileDetails['name'];
+                }
+                if (isset($profileDetails['description'])) {
+                    $this->description = $profileDetails['description'];
+                }
+                if (isset($profileDetails['status'])) {
+                    $this->status = $profileDetails['status'];
+                }
+            }
+
+            $this->save();
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
+    
 }
