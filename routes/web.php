@@ -14,7 +14,12 @@ use App\Http\Controllers\UpdateUserController;
 use App\Http\Controllers\SuspendUserController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ActivateUserController;
+use App\Http\Controllers\CreateProfileController;
+use App\Http\Controllers\DeleteProfileController;
 use App\Http\Controllers\PropertyListingController;
+use App\Http\Controllers\SearchProfileController;
+use App\Http\Controllers\UpdateProfileController;
+use App\Http\Controllers\ViewProfileController;
 use PhpParser\Builder\Property;
 
 /*
@@ -56,8 +61,15 @@ Route::middleware([
     Route::get('users/{name}', [SearchUserController::class, 'searchUser'])->name('search-users');
     Route::put('users/{id}/activate-account', [ActivateUserController::class, 'activateAccount'])->name('users.activate-account');
     Route::put('users/{id}/suspend-account', [SuspendUserController::class, 'suspendAccount'])->name('users.suspend-account');
-    Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
-    Route::resource('/userProfile', UserProfileController::class);
+    // Route::put('users/{id}/assign-role', [UserController::class, 'assignRole'])->name('users.assign-role');
+
+    Route::post('/profiles', [CreateProfileController::class, 'createProfile'])->name('profile.create-profile');
+    Route::get('/profiles', [ViewProfileController::class, 'viewProfiles'])->name('profile.index');
+    Route::put('/profiles/{id}/update', [UpdateProfileController::class, 'updateUserProfile'])->name('profile.update');
+    Route::delete('/profiles/{id}/delete', [DeleteProfileController::class, 'deleteProfile'])->name('profile.delete');
+    Route::get('profiles/{name}', [SearchProfileController::class, 'searchProfile'])->name('search-profile');
+
+    // Route::resource('/userProfile', UserProfileController::class);
     
 });
 

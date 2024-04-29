@@ -13,10 +13,17 @@ import TextInput from '@/Components/TextInput.vue';
 import { VueTelInput } from 'vue3-tel-input';
 import 'vue-tel-input/vue-tel-input.css';
 import { initFlowbite } from 'flowbite';
+import { debounce } from 'lodash';
 
-const props = defineProps(['userProfile']);
+const props = defineProps(['userProfile', 'search']);
 const showModal = ref(false);
 const showDeleteConfirmModal = ref(false);
+const search = ref(props.search);
+
+
+const searchProfile = debounce(() => {
+    router.get(route('search-profile', search.value));
+}, 500)
 
 const form = useForm({
     id: '',
@@ -52,7 +59,7 @@ function closeModal() {
 }
 
 function confirmCreateProfile() {
-    form.post(route('userProfile.store'), {
+    form.post(route('profile.create-profile'), {
         onSuccess: () => {
             closeModal();
         }
@@ -60,7 +67,7 @@ function confirmCreateProfile() {
 }
 
 function confirmUpdateProfile() {
-    form.put(route('userProfile.update', form.id), {
+    form.put(route('profile.update', form.id), {
         onSuccess: () => {
             closeModal();
         },
@@ -71,7 +78,7 @@ function confirmUpdateProfile() {
 }
 
 function deleteProfile() {
-    router.delete(route('userProfile.destroy', form.id),
+    router.delete(route('profile.destroy', form.id),
         {
             onFinish: () => {
                 closeModal();
@@ -91,47 +98,61 @@ onMounted(() => initFlowbite())
             </h2>
 
         </template>
-        <div class="p-7 h-screen">
-            <div class="flex justify-around">
-                <table class="w-2/3 z-10">
-                    <thead class="border-b-2 border-gray-200">
-                        <tr>
-                            <td colspan="7" class="text-right pb-6">
-                                <PrimaryButton @click="showCreateUserProfileForm">
-                                    Create
-                                </PrimaryButton>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Role</th>
-                            <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Description</th>
-                            <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Status</th>
-                            <th colspan=2
-                                class="bg-gray-50 py-3 px-1 pr-2 text-lg font-semibold tracking-wide text-center">
-                                Action
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(userProfile, id) in props.userProfile" :v-bind:key="userProfile.id"
-                            class="bg-white hover:bg-gray-100">
-                            <td class="p-3 text-lg text-gray-700">{{ userProfile.name }}</td>
-                            <td class="p-3 text-lg text-gray-700">{{ userProfile.description }}</td>
-                            <td class="p-3 text-lg text-gray-700">{{ userProfile.status }}</td>
+        <div class="p-7 px-10 h-screen">
+            <div class="flex justify-between pb-7">
+                <form >
+                    <label for="default-search"
+                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search" v-model="search" @input="searchProfile"
+                            class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Search" />
+                    </div>
+                </form>
+                <PrimaryButton @click="showCreateUserProfileForm">
+                    Create
+                </PrimaryButton>
 
-                            <td class="py-3 px-1 text-lg text-gray-700">
-                                <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer"
-                                    @click="showEditModal(userProfile)" />
-                            </td>
-                            <td class="py-3 px-1 text-lg text-gray-700">
-                                <Icon icon="fluent:delete-28-filled" class="hover:text-red-500 hover:cursor-pointer"
-                                    @click="showDeleteConfirmation(userProfile)" />
-                            </td>
-
-                        </tr>
-                    </tbody>
-                </table>
             </div>
+            <!-- <div class="flex justify-center"> -->
+            <table class="w-full ">
+                <thead class="border-b-2 border-gray-200">
+                    <tr>
+                        <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Role</th>
+                        <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Description</th>
+                        <th class="bg-gray-50 p-3 text-lg font-semibold tracking-wide text-left">Status</th>
+                        <th colspan=2 class="bg-gray-50 py-3 px-1 pr-2 text-lg font-semibold tracking-wide text-left">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(userProfile, id) in props.userProfile" :v-bind:key="userProfile.id"
+                        class="bg-white hover:bg-gray-100">
+                        <td class="p-3 text-lg text-gray-700">{{ userProfile.name }}</td>
+                        <td class="p-3 text-lg text-gray-700">{{ userProfile.description }}</td>
+                        <td class="p-3 text-lg text-gray-700">{{ userProfile.status }}</td>
+
+                        <td class="py-3 px-1 text-lg text-gray-700">
+                            <Icon icon="carbon:edit" class="hover:text-indigo-500 hover:cursor-pointer"
+                                @click="showEditModal(userProfile)" />
+                        </td>
+                        <td class="py-3 px-1 text-lg text-gray-700">
+                            <Icon icon="fluent:delete-28-filled" class="hover:text-red-500 hover:cursor-pointer"
+                                @click="showDeleteConfirmation(userProfile)" />
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <!-- </div> -->
         </div>
     </AppLayout>
 

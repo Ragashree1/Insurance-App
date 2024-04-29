@@ -154,15 +154,14 @@ onMounted(() => {
 
         </template>
         <StatusMessage :show="show" @click="hideMessage"></StatusMessage>
-        <div class=" p-7 h-screen w-screen">
-            <div class="flex justify-around">
-                <table class="z-10 ">
+        <div class="p-7 px-10 h-screen w-screen">
+                <table class="z-10 w-full">
                     <thead class="border-b-2 border-gray-200">
                         <tr>
                             <td colspan="2" class="text-left pb-6">
                                 <!-- https://flowbite.com/docs/forms/search-input/#search-bar-example -->
 
-                                <form class="max-w-md mx-auto">
+                                <form >
                                     <label for="default-search"
                                         class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                                     <div class="relative">
@@ -258,7 +257,6 @@ onMounted(() => {
                         </tr>
                     </tbody>
                 </table>
-            </div>
         </div>
     </AppLayout>
 

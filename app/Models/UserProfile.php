@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class UserProfile extends Model
 {
@@ -12,7 +13,7 @@ class UserProfile extends Model
 
     protected $table = 'user_profile';
     const CREATED_AT = 'create_date';
-    const UPDATED_AT = null; 
+    const UPDATED_AT = null;
 
     public function __construct($profileDetails = null)
     {
@@ -31,7 +32,7 @@ class UserProfile extends Model
         }
     }
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -94,7 +95,6 @@ class UserProfile extends Model
                     $this->status = $profileDetails['status'];
                 }
             }
-
             $this->save();
 
             return true;
@@ -103,6 +103,24 @@ class UserProfile extends Model
         }
     }
 
+    public static function getAllProfiles()
+    {
+        return DB::table('user_profile')->get();
+    }
 
-    
+
+    public static function deleteProfile($profile)
+    {
+        try {
+            DB::table('user_profile')->where('name', $profile->name)->delete();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public static function searchProfile($name)
+    {
+        return UserProfile::where('name', 'like', $name.'%')->get();
+    }
 }

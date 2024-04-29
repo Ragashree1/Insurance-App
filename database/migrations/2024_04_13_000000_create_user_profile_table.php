@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_profile', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('description');
             $table->enum('status', ['active', 'inactive']);
             $table->timestamp('create_date')->nullable();

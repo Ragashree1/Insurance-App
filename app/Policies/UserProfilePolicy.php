@@ -13,7 +13,7 @@ class UserProfilePolicy
      */
     public function viewAny(User $user): bool
     {
-       return true;
+       return $user->user_profile_id == 1;
     }
 
     /**
@@ -21,7 +21,7 @@ class UserProfilePolicy
      */
     public function view(User $user, UserProfile $userProfile): bool
     {
-       return true;
+       return $user->user_profile_id == 1;
     }
 
     /**
@@ -29,7 +29,7 @@ class UserProfilePolicy
      */
     public function create(User $user): bool
     {
-       return true;
+       return $user->user_profile_id == 1;
     }
 
     /**
@@ -37,7 +37,7 @@ class UserProfilePolicy
      */
     public function update(User $user, UserProfile $userProfile): bool
     {
-       return true;
+       return $user->user_profile_id == 1;
     }
 
     /**
@@ -45,7 +45,7 @@ class UserProfilePolicy
      */
     public function delete(User $user, UserProfile $userProfile): bool
     {
-       return true;
+       return $user->user_profile_id == 1;
     }
 
     /**
@@ -53,7 +53,7 @@ class UserProfilePolicy
      */
     public function restore(User $user, UserProfile $userProfile): bool
     {
-       return true;
+       return $user->user_profile_id == 1;
     }
 
     /**
@@ -61,6 +61,6 @@ class UserProfilePolicy
      */
     public function forceDelete(User $user, UserProfile $userProfile): bool
     {
-       return true;
+       return $user->user_profile_id == 1;
     }
 }

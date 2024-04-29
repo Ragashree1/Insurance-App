@@ -17,8 +17,8 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-        // Fetch all user profiles with their associated user profiles
-        $userProfiles = UserProfile::all();
+        $this->authorize('viewAny', UserProfile::class);
+        $userProfiles = UserProfile::getAllProfiles();
         return Inertia::render('UserProfile/Index', ['userProfile' => $userProfiles]);
     }
 
@@ -28,7 +28,7 @@ class UserProfileController extends Controller
      */
     public function store(StoreUserProfileRequest $request)
     {
-        //$this->authorize('create', UserProfile::class);
+        $this->authorize('create', UserProfile::class);
         $validated = $request->validate([
             'name' => ['required', 'max:50'],
             'description'=> ['nullable','string'],
@@ -38,7 +38,7 @@ class UserProfileController extends Controller
         $messageType = 'error';
         $message =  'User Profile not created';
 
-        if (UserProfile::create($validated)) {
+        if (UserProfile::createUserProfile($validated) != null) {
             $messageType = 'success';
             $message =  'User Profile created successfully';
         }
@@ -46,21 +46,6 @@ class UserProfileController extends Controller
         return Redirect::back()->with($messageType, $message);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(UserProfile $userProfile)
-    {
-        $this->authorize('view', $userProfile);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UserProfile $editProfile)
-    {
-        $this->authorize('view', $editProfile);
-    }
 
     /**
      * Update the specified resource in storage.
@@ -77,7 +62,7 @@ class UserProfileController extends Controller
         $messageType = 'error';
         $message =  'User Profile not updated';
 
-        if ($userProfile->update($validated) == true) {
+        if ($userProfile->updateProfile($validated) == true) {
             $messageType = 'success';
             $message =  'User Profile updated successfully';
         }
@@ -90,9 +75,8 @@ class UserProfileController extends Controller
      */
     public function destroy(UserProfile $userProfile)
     {
-        //$this->authorize('delete', $userProfile);
-
-        $messageType = $userProfile->delete() ? 'success' : 'error';
+        $this->authorize('delete', $userProfile);
+        $messageType = UserProfile::deleteProfile($userProfile) ? 'success' : 'error';
         $message = $messageType == 'success' ? 'User Profile deleted successfully' : 'Error deleting user';
 
         return Redirect::back()->with($messageType, $message);
