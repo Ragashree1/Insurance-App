@@ -33,12 +33,19 @@
             /></a>
             <ul class="flex space-x-6 mr-6 text-lg">
                 <li>
-                    <a href="register.html" class="hover:text-laravel"
-                        ><i class="fa-solid fa-user-plus"></i> Manage</a
+                    <a href="/listings/manage/2" class="hover:text-laravel"
+                        ><i class="fa-solid fa-gear"></i>
+                        Manage Listings</a
                     >
                 </li>
                 <li>
-                    <a href="login.html" class="hover:text-laravel"
+                    <a href="/listings" class="hover:text-laravel"
+                        ><i class="fa-solid fa-house"></i>
+                        All Listings</a
+                    >
+                </li>
+                <li>
+                    <a href="/login" class="hover:text-laravel"
                         ><i class="fa-solid fa-arrow-right-to-bracket"></i>
                         Logout</a
                     >
@@ -56,5 +63,6 @@
             <p class="ml-2">Copyright &copy; 2024, All Rights reserved</p>
 
         </footer>
+        
     </body>
 </html>
