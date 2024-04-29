@@ -17,6 +17,9 @@ use App\Http\Controllers\ActivateUserController;
 use App\Http\Controllers\PropertyListingController;
 use PhpParser\Builder\Property;
 
+use App\Http\Controllers\MortgageController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,6 +64,7 @@ Route::middleware([
     
 });
 
+
 // ------------- Listings ------------------------
 
 Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
@@ -91,5 +95,7 @@ Route::get('listings/manage/{user_id}', [PropertyListingController::class, 'view
 
 
 
+Route::get('/mortgage', function () { return view('CalculateMortgage'); })->name('mortgage');
+Route::post('/mortgage', [MortgageController::class, 'calculate'])->name('calculate');
 
 
