@@ -16,6 +16,7 @@ class MortgageController extends Controller
             'years' => 'required|numeric|min:1', 
             'percentage' => 'required|numeric|min:1',
         ]);
+        /* ^^^ put this in javascript at view. */ 
 
         $price = $request->input('price');
         $years = $request->input('years');

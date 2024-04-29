@@ -68,12 +68,7 @@ Route::middleware([
 // -- view all listings
 Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
 
- Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
-
-Route::get('/mortgage', function () { return view('CalculateMortgage'); })->name('mortgage');
-Route::post('/mortgage', [MortgageController::class, 'calculate'])->name('calculate');
-
-
+Route::get('/listings', [PropertyListingController::class, 'allListings'])->name('allListings');
  // search a listing
  Route::get('/listings/search', [PropertyListingController::class, 'searchListings'])->name('searchListings');
 
