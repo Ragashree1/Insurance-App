@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class DeleteProfileController extends Controller
 {
-    public function deleteProfile(String $id)
+    public function deleteProfile($id)
     {
         $userProfile = UserProfile::findOrFail($id);
         $this->authorize('delete', $userProfile);

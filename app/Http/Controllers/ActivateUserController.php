@@ -17,7 +17,7 @@ use Inertia\Inertia;
 class ActivateUserController extends Controller
 {
 
-    public function activateAccount(String $id)
+    public function activateAccount($id)
     {
         // build in function inside framework
         $user = User::findOrFail($id);

@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Redirect;
 class SuspendUserController extends Controller
 {
 
-    public function suspendAccount(String $id)
+    public function suspendAccount($id)
     {
         // build in function inside framework
         $user = User::findOrFail($id);
-        
+
         $this->authorize('update', $user);
         $user->suspendAccount();
 
@@ -21,5 +21,4 @@ class SuspendUserController extends Controller
 
         return Redirect::back()->with($messageType, $message);
     }
-
 }

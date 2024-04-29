@@ -20,11 +20,11 @@ class UpdateUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateUser(String $id)
+    public function updateUser($id)
     {
         // build in function inside framework
         $user = User::findOrFail($id);
-        
+
         $this->authorize('update', $user);
         $validated = Request::validate([
             'username' => ['required', 'max:50', Rule::unique('users')->ignore($user->id)],
@@ -51,5 +51,4 @@ class UpdateUserController extends Controller
 
         return Redirect::back()->with($messageType, $message);
     }
-
 }

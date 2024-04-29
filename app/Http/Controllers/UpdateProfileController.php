@@ -9,13 +9,13 @@ use Illuminate\Validation\Rule;
 
 class UpdateProfileController extends Controller
 {
-    public function updateUserProfile(String $id)
+    public function updateUserProfile($id)
     {
         $userProfile = UserProfile::findOrFail($id);
         $this->authorize('update', $userProfile);
         $validated = Request::validated([
             'name' => ['required', 'max:50', Rule::unique('user_profile')->ignore($userProfile->id)],
-            'description'=> ['nullable','string'],
+            'description' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive']
         ]);
 

@@ -19,11 +19,11 @@ class DeleteUserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(String $id)
+    public function destroy($id)
     {
         // build in function inside framework
         $user = User::findOrFail($id);
-        
+
         $this->authorize('delete', $user);
 
         $messageType = User::deleteUserAccount($user) ? 'success' : 'error';
