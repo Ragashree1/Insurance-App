@@ -18,13 +18,9 @@ class MortgageController extends Controller
         $interest = $percentage / 100 / 12;
         $num_payments = $years * 12;
 
-        $monthly_payment = ($price * $interest) / (1 - pow(1 + $interest, -$num_payments));
+        $monthlyPayment = ($price * $interest) / (1 - pow(1 + $interest, -$num_payments));
 
-        return view('CalculateMortgage', [
-            'price' => $price,
-            'years' => $years,
-            'percentage' => $percentage,
-            'monthly_payment' => $monthly_payment
-        ]);
-    }
+        // Render the view with the result
+        return response()->json(['monthlyPayment' => $monthlyPayment]);    }
+    
 }
