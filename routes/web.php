@@ -97,5 +97,3 @@ Route::get('listings/manage/{user_id}', [PropertyListingController::class, 'view
 
 Route::get('/mortgage', function () { return view('CalculateMortgage'); })->name('mortgage');
 Route::post('/mortgage', [MortgageController::class, 'calculate'])->name('calculate');
-
-

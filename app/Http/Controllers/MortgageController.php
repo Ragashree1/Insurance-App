@@ -10,14 +10,6 @@ class MortgageController extends Controller
 {
     public function calculate(Request $request)
     {
-        // Validate the input
-        $request->validate([
-            'price' => 'required|numeric|min:1', 
-            'years' => 'required|numeric|min:1', 
-            'percentage' => 'required|numeric|min:1',
-        ]);
-        /* ^^^ put this in javascript at view. */ 
-
         $price = $request->input('price');
         $years = $request->input('years');
         $percentage = $request->input('percentage');
@@ -36,4 +28,3 @@ class MortgageController extends Controller
         ]);
     }
 }
-
